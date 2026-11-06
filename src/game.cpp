@@ -1,6 +1,9 @@
+#include <asm-generic/ioctls.h>
 #include <iostream>
 #include <chrono>
 #include <unistd.h>
+#include <sys/ioctl.h>
+
 #include "levels.hpp"
 #include "game.hpp"
 using namespace std;
@@ -23,8 +26,8 @@ void gameLoop() {
     }
 }
 
-void moveCursor(int row = 0, int col = 0) {
-    cout << "\033[" << row << ";" << col << "H";
+void moveCursor(int line = 0, int col = 0) {
+    cout << "\033[" << line << ";" << col << "H";
 }
 
 void clearScreen() {
@@ -32,16 +35,51 @@ void clearScreen() {
 }
 
 void renderText() {
-    moveCursor(999, 1);
-    cout << "Frame: 12, Size: 13";
+    int cols = 0, lines = 0;
+    getTerminalSize(cols, lines);
+
+    int top = lines - 3;
+    int bottom = lines - 1;
+
+    // Top border
+    moveCursor(top, 1);
+    cout << "+" << string(cols - 2, '-') << "+";
+
+    // Side borders
+    moveCursor(top + 1, 1);
+    cout << "|";
+
+    moveCursor(top + 1, cols);
+    cout << "|";
+
+    // Text
+    moveCursor(top + 1, 2);
+    cout << " Columns: " << cols << " | Rows: " << lines;
+
+    // Bottom border
+    moveCursor(bottom, 1);
+    cout << "+" << string(cols - 2, '-') << "+";
+
+    cout.flush();
 }
 
+
 void render() {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 30; i++) {
         cout << level1[i];
-        cout << "\n";
+        cout << "\033[K";
+        cout << "\r\n";
     }
 
     cout.flush();
 }
 
+int getTerminalSize(int& cols, int& lines) {
+    struct winsize ws;
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 )
+        return -1;
+
+    cols = ws.ws_col;
+    lines = ws.ws_row;
+    return 0;
+}
