@@ -12,10 +12,12 @@
 using namespace std;
 
 void gameLoop() {
+    int xPos = 0, yPos = 0;
     ClearScreen();
 
     while (true) {
         PlaceCursor(0, 0);
+        movePlayer(xPos, yPos);
         render();
         renderText();
         ConsoleSleep(16.67);
@@ -74,3 +76,6 @@ void render() {
     cout.flush();
 }
 
+void movePlayer(int &xPos, int &yPos) {
+    //TODO this :3
+}
