@@ -6,16 +6,21 @@
 
 #include "levels.hpp"
 #include "game.hpp"
+
+#include "lib/myconsole.h"
+#include "lib/mygraphics.h"
+
 using namespace std;
 
 void gameLoop() {
-    clearScreen();
+    ClearScreen();
     using clock = std::chrono::steady_clock;
     constexpr auto frame_time = std::chrono::microseconds(16667);
     
     while(true) {
         auto start = clock::now();
-        moveCursor(0,0);
+        ClearScreen();
+        PlaceCursor(0, 0);
         render();
         renderText();
 
@@ -26,39 +31,38 @@ void gameLoop() {
     }
 }
 
-void moveCursor(int line = 0, int col = 0) {
-    cout << "\033[" << line << ";" << col << "H";
-}
-
-void clearScreen() {
-    std::cout << "\033[2J\033[H";
-}
 
 void renderText() {
     int cols = 0, lines = 0;
-    getTerminalSize(cols, lines);
+    GetMaxWindowSize(cols, lines);
 
     int top = lines - 3;
     int bottom = lines - 1;
 
     // Top border
-    moveCursor(top, 1);
-    cout << "+" << string(cols - 2, '-') << "+";
+    PlaceCursor(1, top);
+    cout << "+";
+    for(int i = 0; i < cols - 2; i++)
+        cout << "-";
+    cout << "+";
 
     // Side borders
-    moveCursor(top + 1, 1);
+    PlaceCursor(1, top + 1);
     cout << "|";
 
-    moveCursor(top + 1, cols);
+    PlaceCursor(cols, top + 1);
     cout << "|";
 
     // Text
-    moveCursor(top + 1, 2);
+    PlaceCursor(2, top + 1);
     cout << " Columns: " << cols << " | Rows: " << lines;
 
     // Bottom border
-    moveCursor(bottom, 1);
-    cout << "+" << string(cols - 2, '-') << "+";
+    PlaceCursor(1, bottom);
+    cout << "+";
+    for(int i = 0; i < cols - 2; i++)
+        cout << "-";
+    cout << "+";
 
     cout.flush();
 }
@@ -74,12 +78,3 @@ void render() {
     cout.flush();
 }
 
-int getTerminalSize(int& cols, int& lines) {
-    struct winsize ws;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 )
-        return -1;
-
-    cols = ws.ws_col;
-    lines = ws.ws_row;
-    return 0;
-}

@@ -1,0 +1,171 @@
+#ifdef _WIN32
+    #define _WIN32_WINNT 0x0500
+    #include <windows.h>
+    #include <conio.h>
+#endif
+
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "mygraphics.h"    
+
+
+// WINDOWS 
+#ifdef _WIN32
+
+void myLine(int x1, int y1, int x2, int y2, MYCOLORREF
+             lineColor)
+{
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+
+    HPEN pen = CreatePen(PS_SOLID, 2, lineColor);
+    SelectObject(device_context, pen);
+    MoveToEx(device_context, x1, y1, NULL);
+    LineTo(device_context, x2, y2);
+    DeleteObject(pen);
+
+    ReleaseDC(console_handle, device_context);
+}
+
+void myRect(int x1, int y1, int x2, int y2,
+            MYCOLORREF
+             lineColor, MYCOLORREF
+             fillColor)
+{
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+
+    HPEN pen = CreatePen(PS_SOLID, 2, lineColor);
+    SelectObject(device_context, pen);
+    HBRUSH brush = ::CreateSolidBrush(fillColor);
+    SelectObject(device_context, brush);
+
+    Rectangle(device_context, x1, y1, x2, y2);
+    DeleteObject(pen);
+    DeleteObject(brush);
+    ReleaseDC(console_handle, device_context);
+}
+
+void myEllipse(int x1, int y1, int x2, int y2,
+               MYCOLORREF
+                lineColor, MYCOLORREF
+                fillColor)
+{
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+
+    HPEN pen = CreatePen(PS_SOLID, 2, lineColor);
+    SelectObject(device_context, pen);
+    HBRUSH brush = ::CreateSolidBrush(fillColor);
+    SelectObject(device_context, brush);
+
+    Ellipse(device_context, x1, y1, x2, y2);
+    DeleteObject(pen);
+    DeleteObject(brush);
+    ReleaseDC(console_handle, device_context);
+}
+
+void myDrawText(int x, int y, int ht, char str[],
+                MYCOLORREF
+                 lineColor, MYCOLORREF
+                 fillColor)
+{
+    WCHAR wstr[20] = {};
+    for (int i = 0; i < 20 && str[i]; ++i)
+        wstr[i] = str[i];
+
+    RECT rects;
+    rects.left   = x;
+    rects.top    = y;
+    rects.right  = x + ht;
+    rects.bottom = y + ht;
+
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+
+    SetTextColor(device_context, lineColor);
+    SetBkColor  (device_context, fillColor);
+    DrawText(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
+    ReleaseDC(console_handle, device_context);
+}
+
+void myDrawTextWithFont(int x, int y, int ht, char str[],
+                        MYCOLORREF
+                         lineColor, MYCOLORREF
+                         fillColor)
+{
+    WCHAR wstr[20] = {};
+    for (int i = 0; i < 20 && str[i]; ++i)
+        wstr[i] = str[i];
+
+    RECT rects;
+    rects.left   = x;
+    rects.top    = y;
+    rects.right  = x + ht;
+    rects.bottom = y + ht;
+
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+
+    HFONT hFont = CreateFont(ht, 0, 0, 0, FW_DONTCARE, FALSE, TRUE, FALSE,
+                             DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+                             CLIP_DEFAULT_PRECIS, 1, VARIABLE_PITCH,
+                             TEXT("Impact"));
+    SelectObject(device_context, hFont);
+
+    SetTextColor(device_context, lineColor);
+    SetBkColor  (device_context, fillColor);
+    DrawText(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
+    DeleteObject(hFont);
+    ReleaseDC(console_handle, device_context);
+}
+
+void mySetPixel(float x, float y, MYCOLORREF
+                 colorVal)
+{
+    HWND console_handle = GetConsoleWindow();
+    HDC  device_context = GetDC(console_handle);
+    SetPixel(device_context, (int)x, (int)y, colorVal);
+    ReleaseDC(console_handle, device_context);
+}
+
+// POSIX  
+#else
+
+
+#include <cstdio>
+
+static void warnOnce(const char* who) {
+    static bool warned = false;
+    if (!warned) {
+        std::fprintf(stderr,
+            "[MyGraphics] '%s' called on a non-Windows platform; "
+            "graphics.\n", who);
+        warned = true;
+    }
+}
+
+void myLine(int, int, int, int, MYCOLORREF
+            )                 { warnOnce("myLine"); }
+void myRect(int, int, int, int, MYCOLORREF
+            , MYCOLORREF
+            )       { warnOnce("myRect"); }
+void myEllipse(int, int, int, int, MYCOLORREF
+               , MYCOLORREF
+               )    { warnOnce("myEllipse"); }
+void myDrawText(int, int, int, char[], MYCOLORREF
+                , MYCOLORREF
+                ){ warnOnce("myDrawText"); }
+void myDrawTextWithFont(int, int, int, char[],
+                        MYCOLORREF
+                        , MYCOLORREF
+                      )                { warnOnce("myDrawTextWithFont"); }
+void mySetPixel(float, float, MYCOLORREF
+                )                    { warnOnce("mySetPixel"); }
+
+
+#endif // _WIN32
+
