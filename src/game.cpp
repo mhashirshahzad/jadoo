@@ -19,11 +19,9 @@ void gameLoop() {
     
     while(true) {
         auto start = clock::now();
-        ClearScreen();
         PlaceCursor(0, 0);
         render();
         renderText();
-
         auto elapsed = clock::now() - start;
 
         if (elapsed < frame_time)
@@ -36,8 +34,8 @@ void renderText() {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
 
-    int top = lines - 3;
-    int bottom = lines - 1;
+    int top = lines - 2;
+    int bottom = lines;
 
     // Top border
     PlaceCursor(1, top);
@@ -48,6 +46,8 @@ void renderText() {
 
     // Side borders
     PlaceCursor(1, top + 1);
+    cout << "\033[2K"; // erase entire line before writing stuff
+    
     cout << "|";
 
     PlaceCursor(cols, top + 1);
@@ -56,6 +56,8 @@ void renderText() {
     // Text
     PlaceCursor(2, top + 1);
     cout << " Columns: " << cols << " | Rows: " << lines;
+    int k = CheckKeyPressed(10);
+    cout << " | KeyPressed: " << k;
 
     // Bottom border
     PlaceCursor(1, bottom);

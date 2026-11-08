@@ -47,7 +47,6 @@ void ClearScreen()
     SetConsoleCursorPosition(h,info.dwCursorPosition);
 }
 
-void PlaceCursor(int x,int y)
 {
     COORD c;
     c.X = x;
@@ -203,7 +202,6 @@ static int translateArrow(const unsigned char* c) {
     return 0;
 }
 
-// ---------- API implementations ----------
 void PlaceCursor(int x, int y)
 {
     ansiMove(x, y);
