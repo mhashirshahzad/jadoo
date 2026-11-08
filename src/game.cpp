@@ -1,6 +1,5 @@
 #include <asm-generic/ioctls.h>
 #include <iostream>
-#include <chrono>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
@@ -14,20 +13,15 @@ using namespace std;
 
 void gameLoop() {
     ClearScreen();
-    using clock = std::chrono::steady_clock;
-    constexpr auto frame_time = std::chrono::microseconds(16667);
-    
-    while(true) {
-        auto start = clock::now();
+
+    while (true) {
         PlaceCursor(0, 0);
         render();
         renderText();
-        auto elapsed = clock::now() - start;
-
-        if (elapsed < frame_time)
-            usleep(std::chrono::duration_cast<std::chrono::microseconds>(frame_time - elapsed).count());
+        ConsoleSleep(16.67);
     }
 }
+
 
 
 void renderText() {

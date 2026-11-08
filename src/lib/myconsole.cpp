@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
@@ -45,6 +46,10 @@ void ClearScreen()
     GetConsoleScreenBufferInfo(h,&info);
     system("cls");
     SetConsoleCursorPosition(h,info.dwCursorPosition);
+}
+
+void ConsoleSleep(float miliseconds) {
+    Sleep(miliseconds);
 }
 
 {
@@ -202,6 +207,9 @@ static int translateArrow(const unsigned char* c) {
     return 0;
 }
 
+void ConsoleSleep(float miliseconds) {
+    usleep(miliseconds * 1000);
+}
 void PlaceCursor(int x, int y)
 {
     ansiMove(x, y);
@@ -227,7 +235,7 @@ void ClearScreen1()
 
 int CheckKeyPressed(int waitTime)
 {
-    RawMode raw;
+    static RawMode raw;
     fd_set set;
     FD_ZERO(&set);
     FD_SET(STDIN_FILENO, &set);
@@ -253,7 +261,7 @@ int CheckKeyPressed(int waitTime)
 
 int CheckKeyPressed1()
 {
-    RawMode raw;
+    static RawMode raw;
     unsigned char c = 0;
     if (read(STDIN_FILENO, &c, 1) != 1) return 0;
 

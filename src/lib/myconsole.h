@@ -47,7 +47,9 @@ void PlaceCursor(int x,int y);
 //this function will clear the screen
 void ClearScreen();
 
-
+// Alternative to Sleep() and usleep() for cross platform-ness
+// added by @hashir, has default value of 16.67 don't ask me T,T
+void ConsoleSleep(float miliseconds = 16.67);
 
 //this function outputs a string str at position (x,y) of the screen 
 void OutputString(int x,int y,char *str);
