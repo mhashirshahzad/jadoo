@@ -68,61 +68,53 @@ void myEllipse(int x1, int y1, int x2, int y2,
     ReleaseDC(console_handle, device_context);
 }
 
-void myDrawText(int x, int y, int ht, char str[],
-                MYCOLORREF
-                 lineColor, MYCOLORREF
-                 fillColor)
+void myDrawText(int x, int y, int ht, char str[], MYCOLORREF lineColor, MYCOLORREF fillColor)
 {
     WCHAR wstr[20] = {};
-    for (int i = 0; i < 20 && str[i]; ++i)
+    for (int i = 0;i < 20 && str[i];++i)
         wstr[i] = str[i];
 
     RECT rects;
-    rects.left   = x;
-    rects.top    = y;
-    rects.right  = x + ht;
-    rects.bottom = y + ht;
+    rects.left = x;
+    rects.top = y;
+    rects.right = x + ht;
+    rects.bottom = y + ht;//(x,y,x+ht,y+ht);
 
     HWND console_handle = GetConsoleWindow();
-    HDC  device_context = GetDC(console_handle);
+    HDC device_context = GetDC(console_handle);
 
     SetTextColor(device_context, lineColor);
-    SetBkColor  (device_context, fillColor);
-    DrawText(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
+    SetBkColor(device_context, fillColor);
+    DrawTextW(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
     ReleaseDC(console_handle, device_context);
 }
 
-void myDrawTextWithFont(int x, int y, int ht, char str[],
-                        MYCOLORREF
-                         lineColor, MYCOLORREF
-                         fillColor)
+void myDrawTextWithFont(int x, int y, int ht, char str[], MYCOLORREF lineColor, MYCOLORREF fillColor)
 {
     WCHAR wstr[20] = {};
-    for (int i = 0; i < 20 && str[i]; ++i)
+    for (int i = 0;i < 20 && str[i];++i)
         wstr[i] = str[i];
 
     RECT rects;
-    rects.left   = x;
-    rects.top    = y;
-    rects.right  = x + ht;
-    rects.bottom = y + ht;
+    HFONT hFont;
+    rects.left = x;
+    rects.top = y;
+    rects.right = x + ht;
+    rects.bottom = y + ht;//(x,y,x+ht,y+ht);
 
     HWND console_handle = GetConsoleWindow();
-    HDC  device_context = GetDC(console_handle);
-
-    HFONT hFont = CreateFont(ht, 0, 0, 0, FW_DONTCARE, FALSE, TRUE, FALSE,
-                             DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
-                             CLIP_DEFAULT_PRECIS, 1, VARIABLE_PITCH,
-                             TEXT("Impact"));
+    HDC device_context = GetDC(console_handle);
+    hFont = CreateFont(ht, 0, 0, 0, FW_DONTCARE, FALSE, TRUE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+        CLIP_DEFAULT_PRECIS, 1, VARIABLE_PITCH, TEXT("Impact"));
     SelectObject(device_context, hFont);
 
     SetTextColor(device_context, lineColor);
-    SetBkColor  (device_context, fillColor);
-    DrawText(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
+    SetBkColor(device_context, fillColor);
+    DrawTextW(device_context, wstr, -1, &rects, DT_TOP | DT_NOCLIP);
     DeleteObject(hFont);
     ReleaseDC(console_handle, device_context);
-}
 
+}
 void mySetPixel(float x, float y, MYCOLORREF
                  colorVal)
 {

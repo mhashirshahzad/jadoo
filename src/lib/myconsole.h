@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
   #include<Windows.h>
-  typedef COLORREF MYCOLORREF
+  typedef COLORREF MYCOLORREF;
 
   // Windows constants remain available
   #define CONSOLE_BLUE        FOREGROUND_BLUE

@@ -1,8 +1,130 @@
+# ============================================
 # Xmake cache
+# ============================================
 .xmake/
 build/
 
-# MacOS Cache
+# ============================================
+# Visual Studio / MSBuild
+# ============================================
+.vs/
+Jadoo/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Oo]ut/
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+*.VC.db
+*.VC.opendb
+
+# Visual Studio user files
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.ncb
+*.aps
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+*.tlog
+*.idb
+*.ipch
+*.iobj
+*.ipdb
+*.obj.enc
+*.exp
+
+# Roslyn / refactor caches
+*.cache
+*.log
+*.coverage
+*.coveragexml
+*.psess
+*.vsp
+*.vspx
+*.vspscc
+
+# Qt / CMake (harmless if unused)
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# ============================================
+# macOS cache
+# ============================================
 .DS_Store
 
+# ============================================
+# Windows
+# ============================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+*.lnk
+Desktop.ini
 
+# ============================================
+# Editors / misc
+# ============================================
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace

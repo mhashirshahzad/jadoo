@@ -1,7 +1,5 @@
-#include <asm-generic/ioctls.h>
 #include <iostream>
-#include <unistd.h>
-#include <sys/ioctl.h>
+
 
 #include "levels.hpp"
 #include "game.hpp"
@@ -20,7 +18,7 @@ void gameLoop() {
         movePlayer(xPos, yPos);
         render();
         renderText();
-        ConsoleSleep(16.67);
+        ConsoleSleep(16.67f);
     }
 }
 

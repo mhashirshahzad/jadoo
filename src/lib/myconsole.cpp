@@ -12,7 +12,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
@@ -52,14 +51,14 @@ void ConsoleSleep(float miliseconds) {
     Sleep(miliseconds);
 }
 
-{
-    COORD c;
-    c.X = x;
-    c.Y = y;
-
-    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(h,c);
-}
+//{
+//    COORD c;
+//    c.X = x;
+//    c.Y = y;
+//
+//    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+//    SetConsoleCursorPosition(h,c);
+//}
 
 int CheckKeyPressed(int waitTime)
 {
@@ -108,7 +107,7 @@ void GetMaxWindowSize(int &maxHorizontal,int &maxVertical)
 
 void SetWindowTitle(char Title[])
 {
-    SetConsoleTitle((LPCWSTR)Title);
+    SetConsoleTitle((LPCSTR)Title);
 }
 
 void GetMaxWindowCoordinates(int &x,int &y)
