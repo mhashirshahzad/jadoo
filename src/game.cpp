@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 #include "levels.hpp"
 #include "game.hpp"
 
@@ -14,8 +13,8 @@ void gameLoop() {
 
     // buffer system to prevent flickering
     // [y][x] is the system blame @hashir not me 
-    char prevBuffer[1000][1000] = {{'\0'}};
-    char newBuffer[1000][1000] = {{'\0'}};
+    char prevBuffer[500][500] = {{'\0'}}; // edited it to 500 by 500
+    char newBuffer[500][500] = {{'\0'}};
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
@@ -52,7 +51,7 @@ void gameLoop() {
     }
 }
 
-void paintMap(int &playerXPos, int &playerYPos, char newBuffer[1000][1000]) {
+void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]) {
     for (int i = 0; i < 30; i++) {
         for (int j = 0; j < 30; j++) {
             newBuffer[i][j] = level1[i][j];
@@ -62,7 +61,7 @@ void paintMap(int &playerXPos, int &playerYPos, char newBuffer[1000][1000]) {
     
 }
 
-void paintUI(int keyCode, char newBuffer[1000][1000]) {
+void paintUI(int keyCode, char newBuffer[500][500]) {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
 
@@ -106,14 +105,14 @@ void paintUI(int keyCode, char newBuffer[1000][1000]) {
     
 }
 
-void renderBuffer(char prevBuffer[1000][1000], char newBuffer[1000][1000]) {
+void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
     // renaming for ease
     int top = lines - 3, mid = lines - 2, bottom = lines - 1;
 
-    for (int i = 0; i < lines && i < 1000; i++) {
-        for (int j = 0; j < cols && j < 1000; j++) {
+    for (int i = 0; i < lines && i < 500; i++) {
+        for (int j = 0; j < cols && j < 500; j++) {
 
             if (newBuffer[i][j] == prevBuffer[i][j])
                 ; // skip drawing
@@ -171,7 +170,7 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
     return key;
 }
 
-void resetBuffer(char buffer[1000][1000], int newLines, int newCols, char resetWith) {
+void resetBuffer(char buffer[500][500], int newLines, int newCols, char resetWith) {
     for (int i = 0; i < newLines; i++)
         for (int j = 0; j < newCols; j++)
             buffer[i][j] = resetWith;

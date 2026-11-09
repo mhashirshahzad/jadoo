@@ -7,6 +7,7 @@ x buffer system
 - async input
 x remove flickering
 - camera centers the player TvT
+- colors don't work on windows :/
 
 # Uzair Tasks
 - 
