@@ -17,6 +17,8 @@ void gameLoop() {
     char prevBuffer[1000][1000] = {{'\0'}};
     char newBuffer[1000][1000] = {{'\0'}};
 
+    int prevCols = 0, prevLines = 0;
+    int newCols = 0, newLines = 0;
     // hides terminal cursor
     // check on windows
     cout << "\033[?25l";
@@ -25,8 +27,19 @@ void gameLoop() {
     ClearScreen();
 
     while (shouldRun) {
-        int cols = 0;
-        int lines = 0;
+        GetMaxWindowSize(newCols, newLines);
+        
+        // if window is resized we have to do this :/
+        if (newCols != prevCols || newLines != prevLines) {
+            ClearScreen();
+
+            resetBuffer(prevBuffer, newLines, newCols);        
+            
+            prevCols = newCols;
+            prevLines = newLines;
+        }
+
+        resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
         int keyCode = handleInput(playerXPos, playerYPos, shouldRun);
 
@@ -34,8 +47,6 @@ void gameLoop() {
         paintUI(keyCode, newBuffer);
 
         renderBuffer(prevBuffer, newBuffer);
-        // render(playerXPos, playerYPos);
-        // renderText(keyCode);
         cout.flush();
         ConsoleSleep(16.67f);
     }
@@ -72,37 +83,48 @@ void paintUI(int keyCode, char newBuffer[1000][1000]) {
     newBuffer[mid][0] = '|';
     newBuffer[mid][cols - 1] = '|';
 
+
+
     // fill bottom, top and mid
     for(int c = 1; c <= cols - 2; c++) {
         // top and bottom need -
         newBuffer[top][c] = '-';
         newBuffer[bottom][c] = '-';
-        // middle will need text
+        // middle will need text later
         newBuffer[mid][c] = ' ';
     }
 
+    // TEXT -> a is 10, b is 20 & c is 37
+    char str[100] = "Columns: a / Rows: b / Key pressed: c";
 
-    // TODO TEXT
-    // PlaceCursor(2, top + 1);
-    // newBuffer[2][top+1] = 'C';
-    // cout << " Columns: " << cols << " | Rows: " << lines;
-    // cout << " | KeyPressed: " << (char)keyCode;
-
+    for (int c = 1; c <= cols - 2 && str[c - 1] != '\0'; c++) {
+        newBuffer[mid][c] = str[c - 1];
+    }
+    newBuffer[mid][10] = cols;
+    newBuffer[mid][20] = lines;
+    newBuffer[mid][37] = keyCode;
+    
 }
 
 void renderBuffer(char prevBuffer[1000][1000], char newBuffer[1000][1000]) {
-    int cols = 0;
-    int lines = 0;
+    int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
+    // renaming for ease
+    int top = lines - 3, mid = lines - 2, bottom = lines - 1;
 
     for (int i = 0; i < lines && i < 1000; i++) {
         for (int j = 0; j < cols && j < 1000; j++) {
-            
-            if (newBuffer[i][j] == 'P') {
+
+            if (newBuffer[i][j] == prevBuffer[i][j])
+                ; // skip drawing
+            else if (newBuffer[i][j] == 'P') {
                 SetColorAtPoint(j + 1, i + 1, CONSOLE_RED);
                 PlaceCursor(j + 1, i + 1);
                 cout << 'P' << "\033[0m";
-            } else if (newBuffer[i][j] != prevBuffer[i][j]) {
+            // } else if (j == 10 && i == mid) {
+            //     PlaceCursor(j + 1, i + 1);
+            //     cout << cols;
+            } else {
                 PlaceCursor(j + 1, i + 1);
                 cout << newBuffer[i][j];
             }
@@ -147,4 +169,10 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
     }
 
     return key;
+}
+
+void resetBuffer(char buffer[1000][1000], int newLines, int newCols, char resetWith) {
+    for (int i = 0; i < newLines; i++)
+        for (int j = 0; j < newCols; j++)
+            buffer[i][j] = resetWith;
 }

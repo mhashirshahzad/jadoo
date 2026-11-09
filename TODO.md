@@ -3,9 +3,10 @@
 
 # Hashir Tasks
 x setup git repo
-- buffer system
+x buffer system
 - async input
-- remove flickering
+x remove flickering
+- camera centers the player TvT
 
 # Uzair Tasks
 - 

@@ -13,3 +13,6 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun);
 
 // renders the difference btwn buffers and updates prevBuffer
 void renderBuffer(char prevBuffer[1000][1000], char newBuffer[1000][1000]);
+
+// replaces every element in buffer with resetWith
+void resetBuffer(char buffer[1000][1000], int newLines, int newCols, char resetWith = '\0');
