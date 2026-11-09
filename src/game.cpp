@@ -10,14 +10,16 @@
 using namespace std;
 
 void gameLoop() {
-    int xPos = 0, yPos = 0;
+    int xPos = 1, yPos = 1;
     ClearScreen();
 
     while (true) {
+
+
         ClearScreen();
         PlaceCursor(1, 1); // was (0,0) test changed it 
         movePlayer(xPos, yPos);
-        render();
+        render(xPos, yPos);
         renderText();
         ConsoleSleep(16.67f);
     }
@@ -65,16 +67,58 @@ void renderText() {
 }
 
 
-void render() {
+void render(int xPos,int yPos) {
+    //for (int i = 0; i < 30; i++) {
+    //    cout << level1[i];
+    //    cout << "\033[K";
+    //    cout << "\r\n";
+    //}
     for (int i = 0; i < 30; i++) {
-        cout << level1[i];
-        cout << "\033[K";
-        cout << "\r\n";
+        for (int j = 0; j < 30; j++) {
+
+            if (i == yPos && j == xPos) {
+                cout << 'P';
+            }
+            else {
+                cout << level1[i][j];
+            }
+        }
+
+        cout << "\n";
     }
 
+
     cout.flush();
+
 }
 
 void movePlayer(int &xPos, int &yPos) {
+
     //TODO this :3
+    int key = CheckKeyPressed(10);
+    int newX = xPos;
+    int newY = yPos;
+
+    if (key == 'W' || key == 'w') {
+        newY--;
+    }
+    else if (key == 'S' || key == 's') {
+        newY++;
+    }
+    else if (key == 'A' || key == 'a') {
+        newX--;
+    }
+    else if (key == 'D' || key == 'd') {
+        newX++;
+    }
+
+    // This is for boundary colliding :|
+    if (newX >= 0 && newX < 30 && newY >= 0 && newY < 30) {
+
+        if (level1[newY][newX] == ' ') {
+            xPos = newX;
+            yPos = newY;
+        }
+    }
+
 }
