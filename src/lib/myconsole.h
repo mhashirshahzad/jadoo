@@ -83,18 +83,8 @@ void SetWindowSize(int width,int height);
 
 
 //changes the color of a certain co-ordinate
-//changes the color of a certain co-ordinate
+//this starts from 1, so if u have 0, it must be bound as 1
 //color can be BACKGROUND_GREEN, BACKGROUND_BLUE,BACKGROUND_RED or a combination of these using | operator
-//e.g. you can send as parameter BACKGROUND_GREEN|BACKGROUND_BLUE
-//the following combinations are possible:
-//FOREGROUND_BLUE    Text color contains blue.
-//FOREGROUND_GREEN    Text color contains green.
-//FOREGROUND_RED    Text color contains red.
-//FOREGROUND_INTENSITY    Text color is intensified.
-//BACKGROUND_BLUE    Background color contains blue.
-//BACKGROUND_GREEN    Background color contains green.
-//BACKGROUND_RED    Background color contains red.
-//BACKGROUND_INTENSITY    Background color is intensified.
 //An example of usage:
 //    PlaceCursor(0,0);
 //    cout << '*';
