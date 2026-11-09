@@ -6,11 +6,20 @@ x setup git repo
 x buffer system
 - async input
 x remove flickering
-- camera centers the player TvT
-- colors don't work on windows :/
+- camera centers the player TvT, and decreasing oppacity for walls... i.e. fake lighting
+x colors don't work on windows :/
 
 # Uzair Tasks
-- 
+- make level end as 'L' which is yellow
+- come up with ideas
+- write a way to change levels, levels.cpp will have functions for it
+- make 'P' 'B' 'G' purple blue and green keys
+- touching capital P B or capital G removes p, b and g walls from the level
+
 
 # Ayaan Tasks
--
+- draw levels on papers with increaseing difficulty
+- puzzles
+- do a beep on level end
+- main menu ui type thingi, we gotta work on it... you can see my render ui logic
+	which makes it stick to bottom and expand to window size

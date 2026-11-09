@@ -117,9 +117,16 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
             if (newBuffer[i][j] == prevBuffer[i][j])
                 ; // skip drawing
             else if (newBuffer[i][j] == 'P') {
+                // STUPIDITY have to call this function twice, once before
+                // printing the character and once after it TvT
                 SetColorAtPoint(j + 1, i + 1, CONSOLE_RED);
                 PlaceCursor(j + 1, i + 1);
-                cout << 'P' << "\033[0m";
+                cout << 'P';
+                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED); 
+
+                // everytime you do SetColorAtPoint, always call this
+                // this will change color to default
+                cout << "\033[0m";
             // } else if (j == 10 && i == mid) {
             //     PlaceCursor(j + 1, i + 1);
             //     cout << cols;
