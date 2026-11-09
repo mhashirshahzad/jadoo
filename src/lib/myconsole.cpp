@@ -12,7 +12,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <stdio.h>
 #include <stdlib.h>
 #include <cmath>
 
@@ -144,8 +143,8 @@ void SetWindowSize(int width,int height)
 bool SetColorAtPoint(int x,int y,int color)
 {
     COORD c,size;
-    c.X = x;
-    c.Y = y;
+    c.X = x - 1;
+    c.Y = y - 1;
     size.X = 1;
     size.Y = 1;
 
@@ -167,11 +166,10 @@ bool SetColorAtPoint(int x,int y,int color)
 
 // ---------- ANSI helpers ----------
 static void ansiMove(int x, int y) {
-    printf("\033[%d;%dH", y, x);   
+    cout << "\033[" << y << ";" << x << "H";
 }
 static void ansiClear() {
-    printf("\033[2J\033[H");
-    fflush(stdout);
+    cout << "\033[2J\033[H" << flush;
 }
 static void ansiColorsFromWinAttr(int attr) {
     int fgBits = attr & (CONSOLE_RED | CONSOLE_GREEN | CONSOLE_BLUE);
@@ -183,7 +181,7 @@ static void ansiColorsFromWinAttr(int attr) {
                  + (bgBits & CONSOLE_BG_GREEN ? 2 : 0)
                  + (bgBits & CONSOLE_BG_BLUE  ? 4 : 0);
     int bright = (attr & CONSOLE_INTENSITY) ? 1 : 0;
-    printf("\033[%d;%d;%dm", bright, fg, bg);
+    cout << "\033[" << bright << ";" << fg << ";" << bg << "m";
 }
 
 // ---------- raw-mode RAII ----------
@@ -219,14 +217,14 @@ void ConsoleSleep(float miliseconds) {
 void PlaceCursor(int x, int y)
 {
     ansiMove(x, y);
-    fflush(stdout);
+    cout.flush();
 }
 
 void OutputString(int x, int y, char *str)
 {
     ansiMove(x, y);
-    fputs(str, stdout);
-    fflush(stdout);
+    cout << str;
+    cout.flush();
 }
 
 void ClearScreen()
@@ -302,8 +300,7 @@ void GetMaxWindowCoordinates(int &x, int &y)
 
 void SetWindowTitle(char Title[])
 {
-    printf("\033]0;%s\007", Title);
-    fflush(stdout);
+    cout << "\033]0;" << Title << '\007' << flush;
 }
 
 // Terminal window size is controlled by the emulator; cannot be set.
@@ -316,9 +313,7 @@ bool SetColorAtPoint(int x, int y, int color)
 {
     ansiMove(x, y);
     ansiColorsFromWinAttr(color);
-    fputc(' ', stdout);
-    printf("\033[0m");
-    fflush(stdout);
+    cout.flush();
     return true;
 }
 

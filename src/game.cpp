@@ -10,10 +10,13 @@
 using namespace std;
 
 void gameLoop() {
+    bool shouldRun = true;
+    char prevBuffer[1000][1000] = {{'\0'}};
+    char newBuffer[1000][1000] = {{'\0'}};
     int xPos = 1, yPos = 1;
     ClearScreen();
 
-    while (true) {
+    while (shouldRun) {
 
 
         ClearScreen();
@@ -21,6 +24,7 @@ void gameLoop() {
         movePlayer(xPos, yPos);
         render(xPos, yPos);
         renderText();
+        cout.flush();
         ConsoleSleep(16.67f);
     }
 }
@@ -63,7 +67,6 @@ void renderText() {
         cout << "-";
     cout << "+";
 
-    cout.flush();
 }
 
 
@@ -77,7 +80,9 @@ void render(int xPos,int yPos) {
         for (int j = 0; j < 30; j++) {
 
             if (i == yPos && j == xPos) {
+                SetColorAtPoint(xPos + 1, yPos + 1, CONSOLE_RED);
                 cout << 'P';
+                cout << "\033[0m";
             }
             else {
                 cout << level1[i][j];
@@ -86,10 +91,6 @@ void render(int xPos,int yPos) {
 
         cout << "\n";
     }
-
-
-    cout.flush();
-
 }
 
 void movePlayer(int &xPos, int &yPos) {
