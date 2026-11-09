@@ -13,6 +13,7 @@ void gameLoop() {
     bool shouldRun = true;
 
     // buffer system to prevent flickering
+    // [y][x] is the system blame @hashir not me 
     char prevBuffer[1000][1000] = {{'\0'}};
     char newBuffer[1000][1000] = {{'\0'}};
 
@@ -24,73 +25,89 @@ void gameLoop() {
     ClearScreen();
 
     while (shouldRun) {
-        ClearScreen();
+        int cols = 0;
+        int lines = 0;
         PlaceCursor(1, 1); // was (0,0) test changed it 
         int keyCode = handleInput(playerXPos, playerYPos, shouldRun);
-        render(playerXPos, playerYPos);
-        renderText(keyCode);
+
+        paintMap(playerXPos, playerYPos, newBuffer);
+        paintUI(keyCode, newBuffer);
+
+        renderBuffer(prevBuffer, newBuffer);
+        // render(playerXPos, playerYPos);
+        // renderText(keyCode);
         cout.flush();
         ConsoleSleep(16.67f);
     }
 }
 
+void paintMap(int &playerXPos, int &playerYPos, char newBuffer[1000][1000]) {
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 30; j++) {
+            newBuffer[i][j] = level1[i][j];
+        }
+    }    
+    newBuffer[playerYPos][playerXPos] = 'P';
+    
+}
 
-
-void renderText(int keyCode = 0) {
+void paintUI(int keyCode, char newBuffer[1000][1000]) {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
 
-    int top = lines - 2;
-    int bottom = lines;
+    // renaming for ease
+    int top = lines - 3;
+    int mid = lines - 2;
+    int bottom = lines - 1;
 
     // Top border
-    PlaceCursor(1, top);
-    cout << "+";
-    for(int i = 0; i < cols - 2; i++)
-        cout << "-";
-    cout << "+";
-
-    // Side borders
-    PlaceCursor(1, top + 1);
-    cout << "\033[2K"; // erase entire line before writing stuff
-    
-    cout << "|";
-
-    PlaceCursor(cols, top + 1);
-    cout << "|";
-
-    // Text
-    PlaceCursor(2, top + 1);
-    cout << " Columns: " << cols << " | Rows: " << lines;
-    cout << " | KeyPressed: " << (char)keyCode;
+    newBuffer[top][0] = '+';
+    newBuffer[top][cols - 1] = '+';
 
     // Bottom border
-    PlaceCursor(1, bottom);
-    cout << "+";
-    for(int i = 0; i < cols - 2; i++)
-        cout << "-";
-    cout << "+";
+    newBuffer[bottom][0] = '+';
+    newBuffer[bottom][cols - 1] = '+';
+
+    // Side borders
+    newBuffer[mid][0] = '|';
+    newBuffer[mid][cols - 1] = '|';
+
+    // fill bottom, top and mid
+    for(int c = 1; c <= cols - 2; c++) {
+        // top and bottom need -
+        newBuffer[top][c] = '-';
+        newBuffer[bottom][c] = '-';
+        // middle will need text
+        newBuffer[mid][c] = ' ';
+    }
+
+
+    // TODO TEXT
+    // PlaceCursor(2, top + 1);
+    // newBuffer[2][top+1] = 'C';
+    // cout << " Columns: " << cols << " | Rows: " << lines;
+    // cout << " | KeyPressed: " << (char)keyCode;
 
 }
 
+void renderBuffer(char prevBuffer[1000][1000], char newBuffer[1000][1000]) {
+    int cols = 0;
+    int lines = 0;
+    GetMaxWindowSize(cols, lines);
 
-void render(int xPos,int yPos) {
-
-    for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 30; j++) {
-
-            if (i == yPos && j == xPos) {
-
-                SetColorAtPoint(xPos + 1, yPos + 1, CONSOLE_RED);
-                cout << 'P';
-                cout << "\033[0m";
+    for (int i = 0; i < lines && i < 1000; i++) {
+        for (int j = 0; j < cols && j < 1000; j++) {
+            
+            if (newBuffer[i][j] == 'P') {
+                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED);
+                PlaceCursor(j + 1, i + 1);
+                cout << 'P' << "\033[0m";
+            } else if (newBuffer[i][j] != prevBuffer[i][j]) {
+                PlaceCursor(j + 1, i + 1);
+                cout << newBuffer[i][j];
             }
-            else {
-                cout << level1[i][j];
-            }
+            prevBuffer[i][j] = newBuffer[i][j];
         }
-
-        cout << "\n";
     }
 }
 
@@ -100,9 +117,9 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
 
     if (key == ESCKEY) {
         shouldRun = false;
-        return -1;
+        return key;
     }
-    // Player movement
+    // Player movement done by @ayaan @uzair
     int newX = xPos;
     int newY = yPos;
 
