@@ -42,6 +42,8 @@ const int ESCKEY = 27;
 
 
 //this function will place the cursor at a certain position on the screen
+// edited to use x - 1, y - 1 on windows since it matches with the ASCII one 
+// now :SOB:
 void PlaceCursor(int x,int y);
 
 //this function will clear the screen
@@ -109,6 +111,8 @@ void GetMaxWindowCoordinates(int &x,int &y);
 //will print a circle
 void Circle(int a, int b, int radius, MYCOLORREF colVal);
 
+
+// This gives no of columns and lines possible on the terminal (in chars)
 void GetMaxWindowSize(int &maxHorizontal, int &maxVertical);
 #endif
 

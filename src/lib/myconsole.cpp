@@ -51,14 +51,14 @@ void ConsoleSleep(float miliseconds) {
     Sleep(miliseconds);
 }
 
-//{
-//    COORD c;
-//    c.X = x;
-//    c.Y = y;
-//
-//    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-//    SetConsoleCursorPosition(h,c);
-//}
+void PlaceCursor(int x, int y) {
+    COORD c;
+    c.X = x - 1;
+    c.Y = y - 1;
+
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(h,c);
+}
 
 int CheckKeyPressed(int waitTime)
 {
@@ -97,12 +97,19 @@ int CheckKeyPressed1()
     return a;
 }
 
-void GetMaxWindowSize(int &maxHorizontal,int &maxVertical)
+void GetMaxWindowSize(int& maxHorizontal, int& maxVertical)
 {
-    COORD c;
-
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-    c = GetLargestConsoleWindowSize(h);
+
+    if (GetConsoleScreenBufferInfo(h, &csbi)) {
+        maxHorizontal = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        maxVertical = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+    }
+    else {
+        maxHorizontal = 80;
+        maxVertical = 25;
+    }
 }
 
 void SetWindowTitle(char Title[])

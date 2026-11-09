@@ -14,7 +14,8 @@ void gameLoop() {
     ClearScreen();
 
     while (true) {
-        PlaceCursor(0, 0);
+        ClearScreen();
+        PlaceCursor(1, 1); // was (0,0) test changed it 
         movePlayer(xPos, yPos);
         render();
         renderText();
