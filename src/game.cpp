@@ -99,16 +99,16 @@ void movePlayer(int &xPos, int &yPos) {
     int newX = xPos;
     int newY = yPos;
 
-    if (key == 'W' || key == 'w') {
+    if (key == 'W' || key == 'w' || key == UPKEY) {
         newY--;
     }
-    else if (key == 'S' || key == 's') {
+    else if (key == 'S' || key == 's' || key == DOWNKEY) {
         newY++;
     }
-    else if (key == 'A' || key == 'a') {
+    else if (key == 'A' || key == 'a' || key == LEFTKEY) {
         newX--;
     }
-    else if (key == 'D' || key == 'd') {
+    else if (key == 'D' || key == 'd' || key == RIGHTKEY) {
         newX++;
     }
 
