@@ -1,6 +1,9 @@
 > This is kind of like a document for us to write stuff on.
 > remove - with x when you are done with the task.
 
+# general tasks anyone can do this
+- level system... changeable levels etc... do it in levels.hpp and levels.cpp
+
 # Hashir Tasks
 x setup git repo
 x buffer system
@@ -8,6 +11,8 @@ x buffer system
 x remove flickering
 - camera centers the player TvT, and decreasing oppacity for walls... i.e. fake lighting
 x colors don't work on windows :/
+- 't' turns '.' into * acting as a lockable door
+
 
 # Uzair Tasks
 - make level end as 'L' which is yellow

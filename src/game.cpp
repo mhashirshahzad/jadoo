@@ -52,9 +52,9 @@ void gameLoop() {
 }
 
 void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]) {
-    for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 30; j++) {
-            newBuffer[i][j] = level1[i][j];
+    for (int i = 0; i < currentLevelSize; i++) {
+        for (int j = 0; j < currentLevelSize; j++) {
+            newBuffer[i][j] = level2[i][j];
         }
     }    
     newBuffer[playerYPos][playerXPos] = 'P';
@@ -168,7 +168,7 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
     if (newX >= 0 && newX < 30 && newY >= 0 && newY < 30) {
 
         // this is if that point is walkable
-        if (level1[newY][newX] == ' ') {
+        if (level2[newY][newX] == ' ') {
             xPos = newX;
             yPos = newY;
         }
