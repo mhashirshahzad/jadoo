@@ -15,12 +15,15 @@ void gameLoop() {
     // [y][x] is the system blame @hashir not me 
     char prevBuffer[500][500] = {{'\0'}}; // edited it to 500 by 500
     char newBuffer[500][500] = {{'\0'}};
+    // draws on top of the buffer to make it ultra ultra cool
+    // todo by @hashir
+    char fxBuffer[500][500] = { {'\0'}};
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
     int keys = 0;
+    
     // hides terminal cursor
-    // check on windows
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
@@ -84,8 +87,6 @@ void paintUI(int keyCode, char newBuffer[500][500]) {
     newBuffer[mid][0] = '|';
     newBuffer[mid][cols - 1] = '|';
 
-
-
     // fill bottom, top and mid
     for(int c = 1; c <= cols - 2; c++) {
         // top and bottom need -
@@ -119,20 +120,18 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
             if (newBuffer[i][j] == prevBuffer[i][j])
                 ; // skip drawing
             else if (newBuffer[i][j] == 'P') {
-                // STUPIDITY have to call this function twice, once before
-                // printing the character and once after it TvT
-                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED);
-                PlaceCursor(j + 1, i + 1);
-                cout << 'P';
-                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED); 
-
-                // everytime you do SetColorAtPoint, always call this
-                // this will change color to default
-                cout << "\033[0m";
-            // } else if (j == 10 && i == mid) {
-            //     PlaceCursor(j + 1, i + 1);
-            //     cout << cols;
-            } else {
+                PrintColoredCharAtPoint(j + 1, i + 1, 'P', CONSOLE_RED);
+            }
+            else if (newBuffer[i][j] == 'k') {
+                PrintColoredCharAtPoint(j + 1, i + 1, 'k', CONSOLE_GREEN);
+            }
+            else if (newBuffer[i][j] == 'D') {
+                PrintColoredCharAtPoint(j + 1, i + 1, 'D', CONSOLE_GREEN | CONSOLE_RED);
+            }
+            else if (newBuffer[i][j] == '+') {
+                PrintColoredCharAtPoint(j + 1, i + 1, '+', CONSOLE_GREEN);
+            }
+            else {
                 PlaceCursor(j + 1, i + 1);
                 cout << newBuffer[i][j];
             }
@@ -145,7 +144,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
     int key = CheckKeyPressed(10);
 
-    if (key == ESCKEY) {
+    if (key == ESCKEY || key == 'q') {
         shouldRun = false;
         return key;
     }
@@ -169,7 +168,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
     // This is for boundary colliding :|
     if (newX >= 0 && newX < currentLevelSize && newY >= 0 && newY < currentLevelSize) {
 
-    // this is if that point is walkable
+        // this is if that point is walkable
 
         char des = currentLevel[newY][newX];
         if (des == ' ') {
@@ -190,12 +189,8 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             xPos = newX;
             yPos = newY;
         }
-        return key;
     }
-
-    
-
-    
+    return key; 
 }
 
 void resetBuffer(char buffer[500][500], int newLines, int newCols, char resetWith) {

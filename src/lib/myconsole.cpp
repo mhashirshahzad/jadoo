@@ -161,6 +161,14 @@ bool SetColorAtPoint(int x,int y,int color)
     return false;
 }
 
+bool PrintColoredCharAtPoint(int x, int y, char c, int color) {
+    
+    PlaceCursor(x, y);
+    cout << c;
+    SetSetColorAtPoint(x, y, color);
+    cout << "\033[0m";
+    return 1;
+}
 // mac linux smth POSIX
 #else
 
@@ -172,16 +180,22 @@ static void ansiClear() {
     cout << "\033[2J\033[H" << flush;
 }
 static void ansiColorsFromWinAttr(int attr) {
-    int fgBits = attr & (CONSOLE_RED | CONSOLE_GREEN | CONSOLE_BLUE);
-    int bgBits = attr & (CONSOLE_BG_RED | CONSOLE_BG_GREEN | CONSOLE_BG_BLUE);
-    int fg = 30 + (fgBits & CONSOLE_RED   ? 1 : 0)
-                 + (fgBits & CONSOLE_GREEN ? 2 : 0)
-                 + (fgBits & CONSOLE_BLUE  ? 4 : 0);
-    int bg = 40 + (bgBits & CONSOLE_BG_RED   ? 1 : 0)
-                 + (bgBits & CONSOLE_BG_GREEN ? 2 : 0)
-                 + (bgBits & CONSOLE_BG_BLUE  ? 4 : 0);
-    int bright = (attr & CONSOLE_INTENSITY) ? 1 : 0;
-    cout << "\033[" << bright << ";" << fg << ";" << bg << "m";
+    int f = (attr & CONSOLE_RED   ? 1 : 0)
+          | (attr & CONSOLE_GREEN ? 2 : 0)
+          | (attr & CONSOLE_BLUE  ? 4 : 0);
+    int b = (attr & CONSOLE_BG_RED   ? 1 : 0)
+          | (attr & CONSOLE_BG_GREEN ? 2 : 0)
+          | (attr & CONSOLE_BG_BLUE  ? 4 : 0);
+
+    int fg = ((attr & CONSOLE_INTENSITY) ? 90 : 30) + f;
+
+    int bg;
+    if (b == 0 && !(attr & CONSOLE_BG_INTENSITY))
+        bg = 49;                                   // terminal default, no box
+    else
+        bg = ((attr & CONSOLE_BG_INTENSITY) ? 100 : 40) + b;
+
+    cout << "\033[0;" << fg << ";" << bg << "m";
 }
 
 // ---------- raw-mode RAII ----------
@@ -220,6 +234,12 @@ void PlaceCursor(int x, int y)
     cout.flush();
 }
 
+bool PrintColoredCharAtPoint(int x, int y, char c, int color) {
+    SetColorAtPoint(x, y, color);
+    PlaceCursor(x, y);
+    cout << c << "\033[0m";
+    return 1;
+}
 void OutputString(int x, int y, char *str)
 {
     ansiMove(x, y);
