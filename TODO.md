@@ -2,7 +2,7 @@
 > remove - with x when you are done with the task.
 
 # general tasks anyone can do this
-- level system... changeable levels etc... do it in levels.hpp and levels.cpp
+x level system... changeable levels etc... do it in levels.hpp and levels.cpp 
 
 # Hashir Tasks
 x setup git repo

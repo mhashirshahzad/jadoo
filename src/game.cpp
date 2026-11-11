@@ -23,6 +23,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
+    changeCurrentLevel(level1);
     ClearScreen();
 
     while (shouldRun) {
@@ -54,7 +55,7 @@ void gameLoop() {
 void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]) {
     for (int i = 0; i < currentLevelSize; i++) {
         for (int j = 0; j < currentLevelSize; j++) {
-            newBuffer[i][j] = level2[i][j];
+            newBuffer[i][j] = currentLevel[i][j];
         }
     }    
     newBuffer[playerYPos][playerXPos] = 'P';
@@ -165,10 +166,10 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
     }
 
     // This is for boundary colliding :|
-    if (newX >= 0 && newX < 30 && newY >= 0 && newY < 30) {
+    if (newX >= 0 && newX < currentLevelSize && newY >= 0 && newY < currentLevelSize) {
 
         // this is if that point is walkable
-        if (level2[newY][newX] == ' ') {
+        if (currentLevel[newY][newX] == ' ') {
             xPos = newX;
             yPos = newY;
         }
