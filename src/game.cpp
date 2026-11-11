@@ -21,13 +21,13 @@ void gameLoop() {
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
-    int keys = 0;
+    int keysObtained = 0;
     
     // hides terminal cursor
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level3);
+    changeCurrentLevel(level1);
     ClearScreen();
 
     while (shouldRun) {
@@ -45,10 +45,10 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, keys, shouldRun);
+        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun);
 
         paintMap(playerXPos, playerYPos, newBuffer);
-        paintUI(keyCode, newBuffer);
+        paintUI(keyCode, newBuffer, keysObtained);
 
         renderBuffer(prevBuffer, newBuffer);
         cout.flush();
@@ -62,11 +62,11 @@ void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]) {
             newBuffer[i][j] = currentLevel[i][j];
         }
     }    
-    newBuffer[playerYPos][playerXPos] = 'P';
+    newBuffer[playerYPos][playerXPos] = '@';
     
 }
 
-void paintUI(int keyCode, char newBuffer[500][500]) {
+void paintUI(int keyCode, char newBuffer[500][500], int &keysObtained) {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
 
@@ -76,12 +76,12 @@ void paintUI(int keyCode, char newBuffer[500][500]) {
     int bottom = lines - 1;
 
     // Top border
-    newBuffer[top][0] = '+';
-    newBuffer[top][cols - 1] = '+';
+    newBuffer[top][0] = '\1';
+    newBuffer[top][cols - 1] = '\2';
 
     // Bottom border
-    newBuffer[bottom][0] = '+';
-    newBuffer[bottom][cols - 1] = '+';
+    newBuffer[bottom][0] = '\3';
+    newBuffer[bottom][cols - 1] = '\4';
 
     // Side borders
     newBuffer[mid][0] = '|';
@@ -96,15 +96,13 @@ void paintUI(int keyCode, char newBuffer[500][500]) {
         newBuffer[mid][c] = ' ';
     }
 
-    // TEXT -> a is 10, b is 20 & c is 37
-    char str[100] = "Columns: a / Rows: b / Key pressed: c";
+    char str[100] = "Keys Obtained: b / Key pressed: c";
 
     for (int c = 1; c <= cols - 2 && str[c - 1] != '\0'; c++) {
         newBuffer[mid][c] = str[c - 1];
     }
-    newBuffer[mid][10] = cols;
-    newBuffer[mid][20] = lines;
-    newBuffer[mid][37] = keyCode;
+    newBuffer[mid][16] = keysObtained;
+    newBuffer[mid][33] = keyCode;
     
 }
 
@@ -117,23 +115,64 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
     for (int i = 0; i < lines && i < 500; i++) {
         for (int j = 0; j < cols && j < 500; j++) {
 
-            if (newBuffer[i][j] == prevBuffer[i][j])
+            char newChar = newBuffer[i][j];
+            char prevChar = prevBuffer[i][j];
+            if (newChar == prevChar)
                 ; // skip drawing
-            else if (newBuffer[i][j] == 'P') {
-                PrintColoredCharAtPoint(j + 1, i + 1, 'P', CONSOLE_RED);
+
+            // make this switch TODO
+            else if (newChar == '@') {
+                PrintColoredCharAtPoint(j + 1, i + 1, '@', CONSOLE_RED);
             }
-            else if (newBuffer[i][j] == 'k') {
+            else if (newChar == 'k') {
                 PrintColoredCharAtPoint(j + 1, i + 1, 'k', CONSOLE_GREEN);
             }
-            else if (newBuffer[i][j] == 'D') {
+            else if (newChar == 'D') {
                 PrintColoredCharAtPoint(j + 1, i + 1, 'D', CONSOLE_GREEN | CONSOLE_RED);
             }
-            else if (newBuffer[i][j] == '+') {
+            else if (newChar == '+') {
                 PrintColoredCharAtPoint(j + 1, i + 1, '+', CONSOLE_GREEN);
+            }
+            else if (newChar == 'B' || newChar == 'b') {
+                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_BLUE);
+            }
+            else if (newChar == 'G' || newChar == 'g') {
+                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
+            }
+            else if (newChar == 'V' || newChar == 'v') {
+                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
+            }
+            else if (newChar == '-') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "─";
+            }
+            else if (newChar == '\1') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "┌";
+            }
+            else if (newChar == '\2') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "┐";
+            }
+            else if (newChar == '\3') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "└";
+            }
+            else if (newChar == '\4') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "┘";
+            }
+            else if (newChar == '|') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "│";
+            }
+            else if (newChar == '*') {
+                PlaceCursor(j + 1, i + 1);
+                cout << "█";
             }
             else {
                 PlaceCursor(j + 1, i + 1);
-                cout << newBuffer[i][j];
+                cout << newChar;
             }
             prevBuffer[i][j] = newBuffer[i][j];
         }

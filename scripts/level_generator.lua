@@ -1,5 +1,6 @@
 
-local W, H = 40, 40
+local W, H = 45, 45
+
 local GAP = 2 -- Corridor width
 
 math.randomseed(os.time())
