@@ -11,6 +11,8 @@ extern char level1[100][100];
 
 extern char level2[100][100];
 
+extern char level3[100][100];
+
 void changeCurrentLevel(char newLevel[100][100]);
 
 #endif

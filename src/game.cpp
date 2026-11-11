@@ -18,12 +18,13 @@ void gameLoop() {
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
+    int keys = 0;
     // hides terminal cursor
     // check on windows
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level1);
+    changeCurrentLevel(level3);
     ClearScreen();
 
     while (shouldRun) {
@@ -41,7 +42,7 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, shouldRun);
+        int keyCode = handleInput(playerXPos, playerYPos, keys, shouldRun);
 
         paintMap(playerXPos, playerYPos, newBuffer);
         paintUI(keyCode, newBuffer);
@@ -140,7 +141,7 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
     }
 }
 
-int handleInput(int &xPos, int &yPos, bool &shouldRun) {
+int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
     int key = CheckKeyPressed(10);
 
@@ -168,14 +169,33 @@ int handleInput(int &xPos, int &yPos, bool &shouldRun) {
     // This is for boundary colliding :|
     if (newX >= 0 && newX < currentLevelSize && newY >= 0 && newY < currentLevelSize) {
 
-        // this is if that point is walkable
-        if (currentLevel[newY][newX] == ' ') {
+    // this is if that point is walkable
+
+        char des = currentLevel[newY][newX];
+        if (des == ' ') {
             xPos = newX;
             yPos = newY;
         }
+        else if (des == 'k') {
+            keys++;
+            currentLevel[newY][newX] = ' ';
+            
+            xPos = newX;
+            yPos = newY;
+        }
+        else if (des == 'D' && keys > 0) {
+            keys--;
+            currentLevel[newY][newX] = ' ';
+
+            xPos = newX;
+            yPos = newY;
+        }
+        return key;
     }
 
-    return key;
+    
+
+    
 }
 
 void resetBuffer(char buffer[500][500], int newLines, int newCols, char resetWith) {

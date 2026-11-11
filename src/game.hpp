@@ -10,7 +10,7 @@ void paintUI(int keyCode, char newBuffer[500][500]);
 
 // handles input, both player and exiting
 // also returns a keyCode
-int handleInput(int &xPos, int &yPos, bool &shouldRun);
+int handleInput(int &xPos, int &yPos, int &keys, bool &shouldRun);
 
 // renders the difference btwn buffers and updates prevBuffer
 void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]);

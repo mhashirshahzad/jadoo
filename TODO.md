@@ -23,8 +23,20 @@ x colors don't work on windows :/
 
 
 # Ayaan Tasks
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+x introduce the character as "P"
+x implement movement
+-  
+=======
+>>>>>>> Stashed changes
 - draw levels on papers with increaseing difficulty
 - puzzles
 - do a beep on level end
 - main menu ui type thingi, we gotta work on it... you can see my render ui logic
 	which makes it stick to bottom and expand to window size
+<<<<<<< Updated upstream
+=======
+>>>>>>> ac48ff358d931e0c6a6dde0ae7a13de86776ba8f
+>>>>>>> Stashed changes

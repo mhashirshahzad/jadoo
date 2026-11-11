@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\levels.cpp" />
     <ClCompile Include="src\lib\myconsole.cpp" />
     <ClCompile Include="src\lib\mygraphics.cpp" />
     <ClCompile Include="src\main.cpp" />
