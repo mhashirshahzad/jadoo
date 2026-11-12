@@ -24,7 +24,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level3);
+    changeCurrentLevel(level2);
     ClearScreen();
 
     while (shouldRun) {

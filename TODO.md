@@ -15,7 +15,7 @@ x colors don't work on windows :/
 
 
 # Uzair Tasks
-- make level end as 'L' which is yellow
+- make level end as 'L' which is yellow 
 - come up with ideas
 - write a way to change levels, levels.cpp will have functions for it
 - make 'P' 'B' 'G' purple blue and green keys
