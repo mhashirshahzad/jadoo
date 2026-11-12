@@ -27,7 +27,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level1);
+    changeCurrentLevel(level2);
     ClearScreen();
 
     while (shouldRun) {
@@ -121,58 +121,82 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                 ; // skip drawing
 
             // make this switch TODO
-            else if (newChar == '@') {
-                PrintColoredCharAtPoint(j + 1, i + 1, '@', CONSOLE_RED);
-            }
-            else if (newChar == 'k') {
-                PrintColoredCharAtPoint(j + 1, i + 1, 'k', CONSOLE_GREEN);
-            }
-            else if (newChar == 'D') {
-                PrintColoredCharAtPoint(j + 1, i + 1, 'D', CONSOLE_GREEN | CONSOLE_RED);
-            }
-            else if (newChar == '+') {
-                PrintColoredCharAtPoint(j + 1, i + 1, '+', CONSOLE_GREEN);
-            }
-            else if (newChar == 'B' || newChar == 'b') {
-                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_BLUE);
-            }
-            else if (newChar == 'G' || newChar == 'g') {
-                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
-            }
-            else if (newChar == 'V' || newChar == 'v') {
-                PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
-            }
-            else if (newChar == '-') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "─";
-            }
-            else if (newChar == '\1') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "┌";
-            }
-            else if (newChar == '\2') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "┐";
-            }
-            else if (newChar == '\3') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "└";
-            }
-            else if (newChar == '\4') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "┘";
-            }
-            else if (newChar == '|') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "│";
-            }
-            else if (newChar == '*') {
-                PlaceCursor(j + 1, i + 1);
-                cout << "█";
-            }
-            else {
-                PlaceCursor(j + 1, i + 1);
-                cout << newChar;
+            else switch (newChar) {
+                case '@':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED);
+                    break;
+                case 'k':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
+                    break;
+                case 'D':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED);
+                    break;
+                case 'b':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_BLUE);
+                    break;
+                case 'g':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
+                    break;
+                case 'v':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
+                    break;
+
+                // ASCII blocks and walls
+                case '*':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "█";
+                    break;
+                case 'G':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
+                    cout << "\033[0m";
+                    break;
+                case 'B':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_BLUE);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_BLUE);
+                    cout << "\033[0m";
+                    break;
+                case 'V':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_RED | CONSOLE_BLUE);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_RED | CONSOLE_BLUE);
+                    cout << "\033[0m";
+                    break;
+
+                // UI
+                case '-':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "─";
+                    break;
+                case '\1':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┌";
+                    break;
+                case '\2':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┐";
+                    break;
+                case '\3':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "└";
+                    break;
+                case '\4':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┘";
+                    break;
+                case '|':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "│";
+                    break;
+                default:
+                    PlaceCursor(j + 1, i + 1);
+                    cout << newChar;
+                    break;
             }
             prevBuffer[i][j] = newBuffer[i][j];
         }
@@ -227,6 +251,11 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
             xPos = newX;
             yPos = newY;
+        }
+        else if (des == 'g' || des == 'v' || des == 'b') {
+            xPos = newX;
+            yPos = newY;
+            deleteCharFromCurrentLevel(des);
         }
     }
     return key; 

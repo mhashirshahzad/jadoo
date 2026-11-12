@@ -55,7 +55,7 @@ char level2[100][100] = {
     "*****  ******  ******  **********  **  *",
     "*****  ******  ******  **********  **  *",
     "*  **  **              **      **  **  *",
-    "*  **  **         g     **     **  **  *",
+    "*  **  **         g    **      **  **  *",
     "*  **  **********  ******  **  ******  *",
     "*  **  **********  ******  **  ******  *",
     "*  **      **      **      **          *",
@@ -110,14 +110,30 @@ char level3[100][100] = {
     "\0",
 };
 
-void changeCurrentLevel(char newLevel[100][100]) {
-  int i = 0;
-  for (; i <= 500 && newLevel[i][0] != '\0'; i++) {
-    for (int j = 0;j <=500 && newLevel[i][j] != '\0'; j++) {
-      currentLevel[i][j] = newLevel[i][j];
+void deleteCharFromCurrentLevel(char ch) {
+  int i = 0, j = 0;
+  for (; i <= currentLevelSize ; i++) {
+    for (j = 0;j <= currentLevelSize; j++) {
+      if (currentLevel[i][j] == ch || currentLevel[i][j] == ch - 32) {
+      currentLevel[i][j] = ' ';
+      }
     }
   }
+}
 
-  currentLevelSize = i; 
+void changeCurrentLevel(char newLevel[100][100]) {
+  currentLevelSize = 0;
+  int i = 0, j = 0;
+  for (; i <= 100 && newLevel[i][0] != '\0'; i++) {
+    for (j = 0;j <=100 && newLevel[i][j] != '\0'; j++) {
+      currentLevel[i][j] = newLevel[i][j];
+    }
 
+    if (j > currentLevelSize) {
+      currentLevelSize = j;
+    }
+  }
+  if (i > currentLevelSize) {
+      currentLevelSize = i;
+  }
 }
