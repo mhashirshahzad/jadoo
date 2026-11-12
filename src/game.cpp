@@ -15,12 +15,15 @@ void gameLoop() {
     // [y][x] is the system blame @hashir not me 
     char prevBuffer[500][500] = {{'\0'}}; // edited it to 500 by 500
     char newBuffer[500][500] = {{'\0'}};
+    // draws on top of the buffer to make it ultra ultra cool
+    // todo by @hashir
+    char fxBuffer[500][500] = { {'\0'}};
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
-    int keys = 0;
+    int keysObtained = 0;
+    
     // hides terminal cursor
-    // check on windows
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
@@ -42,10 +45,10 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, keys, shouldRun);
+        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun);
 
         paintMap(playerXPos, playerYPos, newBuffer);
-        paintUI(keyCode, newBuffer);
+        paintUI(keyCode, newBuffer, keysObtained);
 
         renderBuffer(prevBuffer, newBuffer);
         cout.flush();
@@ -59,11 +62,11 @@ void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]) {
             newBuffer[i][j] = currentLevel[i][j];
         }
     }    
-    newBuffer[playerYPos][playerXPos] = 'P';
+    newBuffer[playerYPos][playerXPos] = '@';
     
 }
 
-void paintUI(int keyCode, char newBuffer[500][500]) {
+void paintUI(int keyCode, char newBuffer[500][500], int &keysObtained) {
     int cols = 0, lines = 0;
     GetMaxWindowSize(cols, lines);
 
@@ -73,18 +76,16 @@ void paintUI(int keyCode, char newBuffer[500][500]) {
     int bottom = lines - 1;
 
     // Top border
-    newBuffer[top][0] = '+';
-    newBuffer[top][cols - 1] = '+';
+    newBuffer[top][0] = '\1';
+    newBuffer[top][cols - 1] = '\2';
 
     // Bottom border
-    newBuffer[bottom][0] = '+';
-    newBuffer[bottom][cols - 1] = '+';
+    newBuffer[bottom][0] = '\3';
+    newBuffer[bottom][cols - 1] = '\4';
 
     // Side borders
     newBuffer[mid][0] = '|';
     newBuffer[mid][cols - 1] = '|';
-
-
 
     // fill bottom, top and mid
     for(int c = 1; c <= cols - 2; c++) {
@@ -95,15 +96,13 @@ void paintUI(int keyCode, char newBuffer[500][500]) {
         newBuffer[mid][c] = ' ';
     }
 
-    // TEXT -> a is 10, b is 20 & c is 37
-    char str[100] = "Columns: a / Rows: b / Key pressed: c";
+    char str[100] = "Keys Obtained: b / Key pressed: c";
 
     for (int c = 1; c <= cols - 2 && str[c - 1] != '\0'; c++) {
         newBuffer[mid][c] = str[c - 1];
     }
-    newBuffer[mid][10] = cols;
-    newBuffer[mid][20] = lines;
-    newBuffer[mid][37] = keyCode;
+    newBuffer[mid][16] = keysObtained;
+    newBuffer[mid][33] = keyCode;
     
 }
 
@@ -116,25 +115,88 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
     for (int i = 0; i < lines && i < 500; i++) {
         for (int j = 0; j < cols && j < 500; j++) {
 
-            if (newBuffer[i][j] == prevBuffer[i][j])
+            char newChar = newBuffer[i][j];
+            char prevChar = prevBuffer[i][j];
+            if (newChar == prevChar)
                 ; // skip drawing
-            else if (newBuffer[i][j] == 'P') {
-                // STUPIDITY have to call this function twice, once before
-                // printing the character and once after it TvT
-                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED);
-                PlaceCursor(j + 1, i + 1);
-                cout << 'P';
-                SetColorAtPoint(j + 1, i + 1, CONSOLE_RED); 
 
-                // everytime you do SetColorAtPoint, always call this
-                // this will change color to default
-                cout << "\033[0m";
-            // } else if (j == 10 && i == mid) {
-            //     PlaceCursor(j + 1, i + 1);
-            //     cout << cols;
-            } else {
-                PlaceCursor(j + 1, i + 1);
-                cout << newBuffer[i][j];
+            // make this switch TODO
+            else switch (newChar) {
+                case '@':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED);
+                    break;
+                case 'k':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
+                    break;
+                case 'D':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED);
+                    break;
+                case 'b':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_BLUE);
+                    break;
+                case 'g':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN);
+                    break;
+                case 'v':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
+                    break;
+
+                // ASCII blocks and walls
+                case '*':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "█";
+                    break;
+                case 'G':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
+                    cout << "\033[0m";
+                    break;
+                case 'B':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_BLUE);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_BLUE);
+                    cout << "\033[0m";
+                    break;
+                case 'V':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_RED | CONSOLE_BLUE);
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "▒";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_RED | CONSOLE_BLUE);
+                    cout << "\033[0m";
+                    break;
+
+                // UI
+                case '-':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "─";
+                    break;
+                case '\1':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┌";
+                    break;
+                case '\2':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┐";
+                    break;
+                case '\3':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "└";
+                    break;
+                case '\4':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "┘";
+                    break;
+                case '|':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "│";
+                    break;
+                default:
+                    PlaceCursor(j + 1, i + 1);
+                    cout << newChar;
+                    break;
             }
             prevBuffer[i][j] = newBuffer[i][j];
         }
@@ -145,7 +207,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
     int key = CheckKeyPressed(10);
 
-    if (key == ESCKEY) {
+    if (key == ESCKEY || key == 'q') {
         shouldRun = false;
         return key;
     }
@@ -169,7 +231,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
     // This is for boundary colliding :|
     if (newX >= 0 && newX < currentLevelSize && newY >= 0 && newY < currentLevelSize) {
 
-    // this is if that point is walkable
+        // this is if that point is walkable
 
         char des = currentLevel[newY][newX];
         if (des == ' ') {
@@ -190,12 +252,19 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             xPos = newX;
             yPos = newY;
         }
-        return key;
+
+        // Spike elimination
+        else if (des == '^') {
+            shouldRun = false;
+        }
+
+        else if (des == 'g' || des == 'v' || des == 'b') {
+            xPos = newX;
+            yPos = newY;
+            deleteCharFromCurrentLevel(des);
+        }
     }
-
-    
-
-    
+    return key; 
 }
 
 void resetBuffer(char buffer[500][500], int newLines, int newCols, char resetWith) {

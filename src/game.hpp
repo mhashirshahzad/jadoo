@@ -6,7 +6,8 @@ void gameLoop();
 void paintMap(int &playerXPos, int &playerYPos, char newBuffer[500][500]);
 
 // same as paintMap but for the UI
-void paintUI(int keyCode, char newBuffer[500][500]);
+void paintUI(int keyCode, char newBuffer[500][500], int &keysObtained);
+
 
 // handles input, both player and exiting
 // also returns a keyCode

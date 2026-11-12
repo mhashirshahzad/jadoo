@@ -91,6 +91,8 @@ void SetWindowSize(int width,int height);
 //    SetColorAtPoint(0,0,BACKGROUND_RED|FOREGROUND_BLUE);
 bool SetColorAtPoint(int x,int y,int color);
 
+// uses SetColorAtPoint and PlaceCursor alognside cout
+bool PrintColoredCharAtPoint(int x, int y, char c, int color);
 
 //set the title of the window
 void SetWindowTitle(char Title[]);
