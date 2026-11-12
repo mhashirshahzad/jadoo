@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 
 #include "levels.hpp"
@@ -7,6 +8,9 @@
 #include "lib/mygraphics.h"
 
 using namespace std;
+
+
+
 
 void gameLoop() {
     bool shouldRun = true;
@@ -46,6 +50,8 @@ void gameLoop() {
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
         int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun);
+    
+        if (keyCode == -200) {ClearScreen(); resetBuffer(prevBuffer,newLines,newCols);}
 
         paintMap(playerXPos, playerYPos, newBuffer);
         paintUI(keyCode, newBuffer, keysObtained);
@@ -275,6 +281,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             xPos = 1;
             yPos = 1;
             levelComplete();
+            return -200;
         }
     }
     return key; 
