@@ -252,6 +252,12 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             xPos = newX;
             yPos = newY;
         }
+
+        // Spike elimination
+        else if (des == '^') {
+            shouldRun = false;
+        }
+
         else if (des == 'g' || des == 'v' || des == 'b') {
             xPos = newX;
             yPos = newY;

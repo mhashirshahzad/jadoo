@@ -165,7 +165,7 @@ bool PrintColoredCharAtPoint(int x, int y, char c, int color) {
     
     PlaceCursor(x, y);
     cout << c;
-    SetSetColorAtPoint(x, y, color);
+    SetColorAtPoint(x, y, color);
     cout << "\033[0m";
     return 1;
 }
