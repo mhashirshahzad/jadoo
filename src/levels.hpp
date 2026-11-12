@@ -17,6 +17,6 @@ extern char level3[100][100];
 void changeCurrentLevel(char newLevel[100][100]);
 
 // deletes a char, i.e sending g deletes all G and g blocks from level;
-void deleteCharFromCurrentLevel(char ch);
+void deleteCharFromCurrentLevel(char ch, int x, int y);
 
 #endif

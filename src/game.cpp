@@ -27,7 +27,8 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level2);
+    int currentLevelNumber = 1;
+    changeCurrentLevel(level1);
     ClearScreen();
 
     while (shouldRun) {
@@ -45,7 +46,7 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun);
+        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun, currentLevelNumber);
 
         paintMap(playerXPos, playerYPos, newBuffer);
         paintUI(keyCode, newBuffer, keysObtained);
@@ -203,7 +204,7 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
     }
 }
 
-int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
+int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLevelNumber) {
 
     int key = CheckKeyPressed(10);
 
@@ -255,14 +256,41 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
         // Spike elimination
         else if (des == '^') {
-            shouldRun = false;
+            if (currentLevelNumber == 1)
+                changeCurrentLevel(level1);
+            if (currentLevelNumber == 2)
+                changeCurrentLevel(level2);
+            if (currentLevelNumber == 3)
+                changeCurrentLevel(level3);
+            xPos = 1;
+            yPos = 1;
         }
 
         else if (des == 'g' || des == 'v' || des == 'b') {
             xPos = newX;
             yPos = newY;
-            deleteCharFromCurrentLevel(des);
+            deleteCharFromCurrentLevel(des, newX, newY);
         }
+
+        else if (des == 'E') {
+            if (currentLevelNumber == 1) {
+                changeCurrentLevel(level2);
+                currentLevelNumber = 2;
+            }
+
+            else if (currentLevelNumber == 2) {
+                changeCurrentLevel(level3);
+                currentLevelNumber = 3;
+            }
+
+            else if (currentLevelNumber == 3) {
+                shouldRun = false;
+            }
+            xPos = 1;
+            yPos = 1;
+            keys = 0;
+        }
+
     }
     return key; 
 }
