@@ -27,7 +27,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(level2);
+    changeCurrentLevel(levels[currentLevelIndex]);
     ClearScreen();
 
     while (shouldRun) {
@@ -153,6 +153,14 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                     SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
                     cout << "\033[0m";
                     break;
+                case 'E':
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN | CONSOLE_RED);
+                    
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "ƒ";
+                    SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN |CONSOLE_RED);
+                    cout << "\033[0m";
+                    break;
                 case 'B':
                     SetColorAtPoint(j + 1, i + 1, CONSOLE_BLUE);
                     PlaceCursor(j + 1, i + 1);
@@ -262,6 +270,11 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             xPos = newX;
             yPos = newY;
             deleteCharFromCurrentLevel(des);
+        }
+        else if (des == 'E') {
+            xPos = 1;
+            yPos = 1;
+            levelComplete();
         }
     }
     return key; 

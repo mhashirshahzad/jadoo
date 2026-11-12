@@ -7,14 +7,14 @@ extern int currentLevelIndex;
 
 extern char currentLevel[100][100];
 
-extern char level1[100][100];
+extern char levels[10][100][100];
 
-extern char level2[100][100];
-
-extern char level3[100][100];
 
 // changes currentLevel and updates CurrentLevelSize
 void changeCurrentLevel(char newLevel[100][100]);
+
+// updates currentLevel to be the next Level
+void levelComplete();
 
 // deletes a char, i.e sending g deletes all G and g blocks from level;
 void deleteCharFromCurrentLevel(char ch);
