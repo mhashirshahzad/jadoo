@@ -7,6 +7,7 @@ extern int currentLevelIndex;
 
 extern char currentLevel[100][100];
 
+// 3D array is love
 extern char levels[10][100][100];
 
 
@@ -15,10 +16,11 @@ void changeCurrentLevel(char newLevel[100][100]);
 
 // updates currentLevel to be the next Level
 void levelComplete();
+// blud this doesn't need comments
 void levelRestart();
 // deletes a char, i.e sending g deletes all G and g blocks from level;
 void deleteEveryCharFromCurrentLevel(char ch);
-// deletes a char, i.e sending g deletes all G and g blocks from level;
+// deletes a char whose position is (x, y)
 void deleteCharFromCurrentLevel(int yPos, int xPos, char ch);
 
 #endif

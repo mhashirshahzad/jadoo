@@ -123,7 +123,13 @@ void deleteEveryCharFromCurrentLevel(char ch) {
     for (j = 0;j <= currentLevelSize; j++) {
       if (currentLevel[i][j] == ch || currentLevel[i][j] == ch - 32) {
         currentLevel[i][j] = ' ';
-        spawnExplosion(i, j, ch);
+
+        if (ch == 'g')
+            spawnExplosion(i, j, ch, CONSOLE_BG_RED);
+        else if (ch == 'b')
+            spawnExplosion(i, j, ch, CONSOLE_BG_BLUE);
+        else if (ch == 'v')
+            spawnExplosion(i, j, ch, CONSOLE_BG_RED | CONSOLE_BG_BLUE);
       }
     }
   }

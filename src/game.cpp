@@ -11,7 +11,7 @@ using namespace std;
 void gameLoop() {
 
     #ifdef _WIN32
-    SetConsoleOutputCCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
     #endif
     bool shouldRun = true;
 
@@ -237,7 +237,6 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
     int newY = yPos;
 
     if (key == 'W' || key == 'w' || key == UPKEY) {
-        ConsoleBeep(1200, 300);
         newY--;
     }
     else if (key == 'S' || key == 's' || key == DOWNKEY) {
@@ -261,8 +260,8 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             yPos = newY;
         }
         else if (des == 'k') {
-            ConsoleBeep(1200, 300);
             keys++;
+            ConsoleBeep(1000, 100);
             currentLevel[newY][newX] = ' ';
             
             xPos = newX;
@@ -270,6 +269,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         }
         else if (des == 'D' && keys > 0) {
             keys--;
+            ConsoleBeep(300, 10);
             deleteCharFromCurrentLevel(newY, newX, des);
             spawnExplosion(newY, newX, 'D');
             xPos = newX;
@@ -278,10 +278,16 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
 
         // Spike elimination
         else if (des == '^') {
-            shouldRun = false;
+            levelRestart();
+            xPos = 1; yPos = 1;
+            spawnCircular(newY, newX, '-', CONSOLE_BG_RED);
+            ConsoleBeep(2000, 200);
+
         }
 
         else if (des == 'g' || des == 'v' || des == 'b') {
+            ConsoleBeep(300, 10);
+
             xPos = newX;
             yPos = newY;
             deleteEveryCharFromCurrentLevel(des);

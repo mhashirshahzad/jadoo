@@ -1,4 +1,3 @@
-#include <alsa/asoundlib.h>
 #ifdef _WIN32
     #include <windows.h>
     #include <conio.h>
@@ -10,8 +9,10 @@
     #include <sys/select.h>
     #include <cstdint>
     #include <alsa/asoundef.h>
+    #include <alsa/asoundlib.h>
 #endif
 
+// some of these are used by windows
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>

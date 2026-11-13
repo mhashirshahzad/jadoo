@@ -7,14 +7,14 @@ using namespace std;
 
 
 //  @TODO FIX THIS SO HARD PLZ
-// works but i am not happy :SOB:
-// gotta find online better effects
-// also COLORS PLZ
+// works but i am not happy :SOB
+// we need coin up/ key up
+// die and door open and fall plz
 int fxBuffer[500][500][6] = {{{0}}};
 int fxTick = 0;
 int fxFrame = 0;
 
-void spawnExplosion(int row, int col, char ch) {
+void spawnExplosion(int row, int col, char ch, MYCOLORREF color) {
   int count = 3;
   int posRandomness = 2;
   int velRandomness = 5;
@@ -33,11 +33,12 @@ void spawnExplosion(int row, int col, char ch) {
       fxBuffer[y][x][2] = vy;
       fxBuffer[y][x][3] = 4 + rand() % 5;
       fxBuffer[y][x][4] = fxTick;
+      fxBuffer[y][x][5] = color;
     }
   }
 }
 
-void spawnCircular(int row, int col, char ch) {
+void spawnCircular(int row, int col, char ch, MYCOLORREF color) {
   int count = 10;
   int posRandomness = 2;
   int velRandomness = 5;
@@ -56,6 +57,8 @@ void spawnCircular(int row, int col, char ch) {
       fxBuffer[y][x][2] = vy;
       fxBuffer[y][x][3] = 4 + rand() % 5;
       fxBuffer[y][x][4] = fxTick;
+      fxBuffer[y][x][5] = color;
+
     }
   }
 }
@@ -79,7 +82,7 @@ void updateFx(char prevBuffer[500][500]) {
         int velX = fxBuffer[i][j][1];       
         int velY = fxBuffer[i][j][2];       
         int life = fxBuffer[i][j][3] - 1; // decreasing life  
-        
+        MYCOLORREF color = fxBuffer[i][j][5];
 
         fxBuffer[i][j][0] = 0;
         prevBuffer[i][j] = '\1';
@@ -96,6 +99,7 @@ void updateFx(char prevBuffer[500][500]) {
           fxBuffer[newY][newX][2] = velY;
           fxBuffer[newY][newX][3] = life;
           fxBuffer[newY][newX][4] = fxTick;
+          fxBuffer[newY][newX][5] = color;
 
           char draw = '.';
 
@@ -103,8 +107,9 @@ void updateFx(char prevBuffer[500][500]) {
           else if (life > 2) draw = '*';
           else if (life == 0) draw = ' ';
 
-          PlaceCursor(newX + 1, newY + 1);
-          cout << draw;
+          //PlaceCursor(newX + 1, newY + 1);
+          PrintColoredCharAtPoint(newX + 1, newY + 1, draw, color);
+          //cout << draw;
         }
         
       }
