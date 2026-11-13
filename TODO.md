@@ -25,8 +25,10 @@ x colors don't work on windows :/
 # Ayaan Tasks
 x introduce the character as "P"
 x implement movement
-- draw levels on papers with increaseing difficulty
-- puzzles
+x draw levels on papers with increaseing difficulty
+x puzzles
+x exit jumps to next level
+x stepping on spike restarts same level
 - do a beep on level end
 - main menu ui type thingi, we gotta work on it... you can see my render ui logic
 	which makes it stick to bottom and expand to window size

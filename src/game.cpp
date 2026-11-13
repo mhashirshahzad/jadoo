@@ -1,4 +1,5 @@
 #include <iostream>
+#include<Windows.h>
 
 #include "levels.hpp"
 #include "game.hpp"
@@ -273,6 +274,9 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         }
 
         else if (des == 'E') {
+
+            Beep(1200, 300);
+
             if (currentLevelNumber == 1) {
                 changeCurrentLevel(level2);
                 currentLevelNumber = 2;
