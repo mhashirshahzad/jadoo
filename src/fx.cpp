@@ -4,7 +4,7 @@
 // #include "fx.hpp"
 // #include "lib/myconsole.h"
 
-// char fxBuffer[500][500] = {{'\0'}};
+char fxBuffer[500][500] = {{'\0'}};
 
 
 
