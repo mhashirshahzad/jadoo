@@ -1,3 +1,4 @@
+#include <alsa/asoundlib.h>
 #ifdef _WIN32
     #include <windows.h>
     #include <conio.h>
@@ -8,6 +9,7 @@
     #include <sys/ioctl.h>
     #include <sys/select.h>
     #include <cstdint>
+    #include <alsa/asoundef.h>
 #endif
 
 #include <iostream>
@@ -161,6 +163,10 @@ bool SetColorAtPoint(int x,int y,int color)
     return false;
 }
 
+int ConsoleBeep(int freq, int duration) {
+    Beep(freq, duration);
+    return 0; 
+}
 bool PrintColoredCharAtPoint(int x, int y, char c, int color) {
     
     PlaceCursor(x, y);
@@ -257,6 +263,33 @@ void ClearScreen1()
     ansiClear();
 }
 
+int ConsoleBeep(int freq, int duration) {
+
+    return 0;
+    // static snd_pcm_t *pcm = NULL;
+    // if (pcm == NULL) {
+    //     if (snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0)) return -1;
+    // snd_pcm_set_params(pcm, SND_PCM_FORMAT_U8,
+    //                     SND_PCM_ACCESS_RW_NONINTERLEAVED, 1, 8000, 1, 20000);
+    // }
+    // unsigned char buf[2400];
+    // long frames;
+    // long phase;
+
+    // for (int i = 0; i < duration / 50; i++) {
+    //     snd_pcm_prepare(pcm);
+    //     for (int j = 0; j < sizeof(buf); j++) {
+    //         buf[j] = freq > 0 ? (255 * j * freq / 8000) : 0;
+    //     }
+    //     int r = snd_pcm_writei(pcm, buf, sizeof(buf));
+    //     if (r < 0) {
+    //       snd_pcm_recover(pcm, r, 0);
+    //     }
+    // }
+    // return 0;
+}
+
+
 int CheckKeyPressed(int waitTime)
 {
     static RawMode raw;
@@ -323,11 +356,6 @@ void SetWindowTitle(char Title[])
     cout << "\033]0;" << Title << '\007' << flush;
 }
 
-// Terminal window size is controlled by the emulator; cannot be set.
-void SetWindowSize(int /*width*/, int /*height*/)
-{
-    // no-op
-}
 
 bool SetColorAtPoint(int x, int y, int color)
 {

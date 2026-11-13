@@ -11,5 +11,7 @@
 extern int fxBuffer[500][500][6];
 
 void spawnExplosion(int row, int col, char ch);
+void spawnCircular(int row, int col, char ch);
+
 void updateFx(char prevBuffer[500][500]);
 #endif

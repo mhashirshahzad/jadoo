@@ -1,5 +1,4 @@
 #include <iostream>
-#include<Windows.h>
 
 #include "levels.hpp"
 #include "game.hpp"
@@ -10,6 +9,10 @@
 using namespace std;
 
 void gameLoop() {
+
+    #ifdef _WIN32
+    SetConsoleOutputCCP(CP_UTF8);
+    #endif
     bool shouldRun = true;
 
     // buffer system to prevent flickering
@@ -229,6 +232,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
     int newY = yPos;
 
     if (key == 'W' || key == 'w' || key == UPKEY) {
+        ConsoleBeep(1200, 300);
         newY--;
     }
     else if (key == 'S' || key == 's' || key == DOWNKEY) {
@@ -252,6 +256,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             yPos = newY;
         }
         else if (des == 'k') {
+            ConsoleBeep(1200, 300);
             keys++;
             currentLevel[newY][newX] = ' ';
             
@@ -280,8 +285,8 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
 
         else if (des == 'E') {
 
-            Beep(1200, 300);
 
+            ConsoleBeep(1200, 300);
             if (currentLevelNumber == 1) {
                 changeCurrentLevel(level2);
                 currentLevelNumber = 2;
@@ -289,6 +294,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
 
             else if (currentLevelNumber == 2) {
                 changeCurrentLevel(level3);
+                spawnCircular(xPos, yPos, 'a');
                 currentLevelNumber = 3;
             }
 

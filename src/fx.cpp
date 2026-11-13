@@ -37,6 +37,29 @@ void spawnExplosion(int row, int col, char ch) {
   }
 }
 
+void spawnCircular(int row, int col, char ch) {
+  int count = 10;
+  int posRandomness = 2;
+  int velRandomness = 5;
+
+  for (int n = 0; n < count; n++) {
+    int x = col + rand() % posRandomness - 1;
+    int y = row + rand() % posRandomness - 1;
+
+    if (!(x < 0 || y < 0 || x >= 500 || y>= 500)) {
+      int vx = rand() % velRandomness - 3;
+      int vy = rand() % velRandomness -2;
+
+      if (vx == 0 && vy == 0) vx = 1;
+      fxBuffer[y][x][0] = ch;
+      fxBuffer[y][x][1] = vx;
+      fxBuffer[y][x][2] = vy;
+      fxBuffer[y][x][3] = 4 + rand() % 5;
+      fxBuffer[y][x][4] = fxTick;
+    }
+  }
+}
+
 void updateFx(char prevBuffer[500][500]) {
   // only mv every third frame
   if(fxFrame++ % 3 != 0) return;
