@@ -123,7 +123,7 @@ void deleteCharFromCurrentLevel(char ch) {
     for (j = 0;j <= currentLevelSize; j++) {
       if (currentLevel[i][j] == ch || currentLevel[i][j] == ch - 32) {
       currentLevel[i][j] = ' ';
-      fxBuffer[i][j] = ch;
+        spawnExplosion(i, j, ch);
       }
     }
   }

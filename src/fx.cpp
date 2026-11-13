@@ -1,59 +1,92 @@
-// #include <iostream>
-// using namespace std;
+#include <iostream>
+#include <cstdlib>
+using namespace std;
 
-// #include "fx.hpp"
-// #include "lib/myconsole.h"
-
-char fxBuffer[500][500] = {{'\0'}};
-
+#include "fx.hpp"
+#include "lib/myconsole.h"
 
 
-// void renderFx(int i, int j) {
-//   PlaceCursor(j + 1, i + 1);
-//   cout << fxBuffer[i][j];
+//  @TODO FIX THIS SO HARD PLZ
+// works but i am not happy :SOB:
+// gotta find online better effects
+// also COLORS PLZ
+int fxBuffer[500][500][6] = {{{0}}};
+int fxTick = 0;
+int fxFrame = 0;
 
-//   if (i < 499 && j < 499)
-//     fxBuffer[i + 1][j + 1] = fxBuffer[i][j];
+void spawnExplosion(int row, int col, char ch) {
+  int count = 3;
+  int posRandomness = 2;
+  int velRandomness = 5;
+
+  for (int n = 0; n < count; n++) {
+    int x = col + rand() % posRandomness - 1;
+    int y = row + rand() % posRandomness - 1;
+
+    if (!(x < 0 || y < 0 || x >= 500 || y>= 500)) {
+      int vx = rand() % velRandomness - 3;
+      int vy = rand() % velRandomness -2;
+
+      if (vx == 0 && vy == 0) vx = 1;
+      fxBuffer[y][x][0] = ch;
+      fxBuffer[y][x][1] = vx;
+      fxBuffer[y][x][2] = vy;
+      fxBuffer[y][x][3] = 4 + rand() % 5;
+      fxBuffer[y][x][4] = fxTick;
+    }
+  }
+}
+
+void updateFx(char prevBuffer[500][500]) {
+  // only mv every third frame
+  if(fxFrame++ % 3 != 0) return;
   
-//   fxBuffer[i][j] = '\0';
-// }
-//  static void dirty(char prevBuffer[500][500], int x, int y) {
-//    if (x >= 0 && y >= 0 && x < 500 && y < 500)
-//      prevBuffer[y][x] = '\0';
-//  }
+  int cols = 0, lines = 0;
+  GetMaxWindowCoordinates(cols, lines);
+  fxTick++;
 
-//  void updateFx(char prevBuffer[500][500]) {
-//    int cols = 0, lines = 0;
-//    GetMaxWindowSize(cols, lines);
+  for (int i = 0; i < lines && i < 500; i++) {
+    for (int j = 0; j < cols && j < 500; j++) {
 
-//    for (int k = 0; k < MAX_PARTICLES; k++) {
-//      Particle &p = particles[k];
-//      if (!p.active) continue;
+      // LOOK WHAT not having CONTINUES makes me do
+      if(fxBuffer[i][j][0] == 0 || fxBuffer[i][j][4] == fxTick)
+        ; // skip
+      else {
+        char ch = fxBuffer[i][j][0];       
+        int velX = fxBuffer[i][j][1];       
+        int velY = fxBuffer[i][j][2];       
+        int life = fxBuffer[i][j][3] - 1; // decreasing life  
+        
 
-//      // old cell gets repainted by renderBuffer on the next frame
-//      dirty(prevBuffer, p.oldX, p.oldY);
+        fxBuffer[i][j][0] = 0;
+        prevBuffer[i][j] = '\1';
 
-//      p.x += p.vx;
-//      p.y += p.vy;
-//      p.vx *= 0.85f;
-//      p.vy *= 0.85f;
-//      p.life--;
+        int newX = j + velX;
+        int newY = i + velY;
 
-//      int ix = (int)(p.x + 0.5f);
-//      int iy = (int)(p.y + 0.5f);
+        if (life <= 0 || newX < 0 || newY < 0 || newX >= cols || newY >= lines)
+          ;
+        else {
+          
+          fxBuffer[newY][newX][0] = ch;
+          fxBuffer[newY][newX][1] = velX;
+          fxBuffer[newY][newX][2] = velY;
+          fxBuffer[newY][newX][3] = life;
+          fxBuffer[newY][newX][4] = fxTick;
 
-//      if (p.life <= 0 || ix < 0 || iy < 0 || ix >= cols || iy >= lines) {
-//        p.active = false;
-//        continue;
-//      }
+          char draw = '.';
 
-//      float t = p.life / (float)p.maxLife;
-//      char draw = t > 0.75f ? p.ch : t > 0.5f ? '*' : t > 0.25f ? '+' : '.';
+          if (life > 4) draw = ch;
+          else if (life > 2) draw = '*';
+          else if (life == 0) draw = ' ';
 
-//      PlaceCursor(ix + 1, iy + 1);
-//      cout << draw;
-//      p.oldX = ix;
-//      p.oldY = iy;
-//    }
-//    cout.flush();
-//  }
+          PlaceCursor(newX + 1, newY + 1);
+          cout << draw;
+        }
+        
+      }
+    } 
+  }
+
+  cout.flush();
+}

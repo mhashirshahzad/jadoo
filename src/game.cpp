@@ -50,6 +50,7 @@ void gameLoop() {
         paintUI(keyCode, newBuffer, keysObtained);
 
         renderBuffer(prevBuffer, newBuffer);
+        updateFx(prevBuffer);
         cout.flush();
         ConsoleSleep(16.67f);
     }
@@ -101,7 +102,9 @@ void paintUI(int keyCode, char newBuffer[500][500], int &keysObtained) {
         newBuffer[mid][c] = str[c - 1];
     }
     newBuffer[mid][16] = keysObtained;
+    // TODO Show arrow keys instead
     newBuffer[mid][33] = keyCode;
+    
     
 }
 
@@ -116,7 +119,6 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
 
             char newChar = newBuffer[i][j];
             char prevChar = prevBuffer[i][j];
-            char fxChar = fxBuffer[i][j];
 
             if (newChar == prevChar)
                 ; // skip drawing
@@ -268,6 +270,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
             keys--;
             currentLevel[newY][newX] = ' ';
 
+            spawnExplosion(newY, newX, 'D');
             xPos = newX;
             yPos = newY;
         }
