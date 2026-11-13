@@ -1,4 +1,5 @@
 #include "levels.hpp"
+#include "fx.hpp"
 
 // size of the current level. it is always a square in my book
 int currentLevelSize = 40;
@@ -112,43 +113,59 @@ char level3[100][100] = {
 
 
 
+
 void deleteCharFromCurrentLevel(char ch, int x, int y) {
 
     currentLevel[y][x] = ' ';
+    spawnExplosion(y, x, ch);
 
     char door = ch - 32;
 
     for (int i = 0; i < currentLevelSize; i++) {
         for (int j = 0; j < currentLevelSize; j++) {
-            if (currentLevel[i][j] == door)
+            if (currentLevel[i][j] == door) {
                 currentLevel[i][j] = ' ';
+                spawnExplosion(i, j, ch);
+            }
         }
     }
     
 
 }
 
+void levelRestart() {
+    if (currentLevelIndex == 1)
+        changeCurrentLevel(level1);
+
+    else if (currentLevelIndex == 2)
+        changeCurrentLevel(level2);
+
+    else if (currentLevelIndex == 3)
+        changeCurrentLevel(level3);
+}
+
 void changeCurrentLevel(char newLevel[100][100]) {
-  currentLevelSize = 0;
+    currentLevelSize = 0;
 
-  //This is to clear the previous level :|
-  for (int i = 0; i < 100; i++) {
-      for (int j = 0; j < 100; j++) {
-          currentLevel[i][j] = ' ';
-      }
-  }
-
-  int i = 0, j = 0;
-  for (; i < 100 && newLevel[i][0] != '\0'; i++) {
-    for (j = 0;j < 100 && newLevel[i][j] != '\0'; j++) {
-      currentLevel[i][j] = newLevel[i][j];
+    //This is to clear the previous level :|
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            currentLevel[i][j] = ' ';
+        }
     }
 
-    if (j > currentLevelSize) {
-      currentLevelSize = j;
+    int i = 0, j = 0;
+    for (; i < 100 && newLevel[i][0] != '\0'; i++) {
+        for (j = 0;j < 100 && newLevel[i][j] != '\0'; j++) {
+            currentLevel[i][j] = newLevel[i][j];
+        }
+
+        if (j > currentLevelSize) {
+            currentLevelSize = j;
+        }
     }
-  }
-  if (i > currentLevelSize) {
-      currentLevelSize = i;
-  }
+    if (i > currentLevelSize) {
+        currentLevelSize = i;
+    }
+
 }

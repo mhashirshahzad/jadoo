@@ -15,11 +15,11 @@ x colors don't work on windows :/
 - animation for level change . -> - -> 0 -> final Character (ie vanquishes);
 
 # Uzair Tasks
-- make level end as 'L' which is yellow 
+x make level end as 'L' which is yellow 
 - come up with ideas
-- write a way to change levels, levels.cpp will have functions for it
-- make 'P' 'B' 'G' purple blue and green keys
-- touching capital P B or capital G removes p, b and g walls from the level
+x write a way to change levels, levels.cpp will have functions for it
+x make 'P' 'B' 'G' purple blue and green keys
+x touching capital P B or capital G removes p, b and g walls from the level
 
 
 # Ayaan Tasks
