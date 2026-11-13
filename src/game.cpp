@@ -28,8 +28,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    int currentLevelNumber = 1;
-    changeCurrentLevel(level1);
+    changeCurrentLevel(levels[currentLevelIndex]);
     ClearScreen();
 
     while (shouldRun) {
@@ -47,7 +46,13 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun, currentLevelNumber);
+        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun, currentLevelIndex);
+
+        if (keyCode == -200) {
+            ClearScreen();
+            resetBuffer(prevBuffer,newLines, newCols);
+            resetBuffer(newBuffer,newLines, newCols);
+        }
 
         paintMap(playerXPos, playerYPos, newBuffer);
         paintUI(keyCode, newBuffer, keysObtained);
@@ -265,8 +270,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         }
         else if (des == 'D' && keys > 0) {
             keys--;
-            currentLevel[newY][newX] = ' ';
-
+            deleteCharFromCurrentLevel(newY, newX, des);
             spawnExplosion(newY, newX, 'D');
             xPos = newX;
             yPos = newY;
@@ -280,30 +284,21 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         else if (des == 'g' || des == 'v' || des == 'b') {
             xPos = newX;
             yPos = newY;
-            deleteCharFromCurrentLevel(des, newX, newY);
+            deleteEveryCharFromCurrentLevel(des);
+
         }
 
         else if (des == 'E') {
 
 
             ConsoleBeep(1200, 300);
-            if (currentLevelNumber == 1) {
-                changeCurrentLevel(level2);
-                currentLevelNumber = 2;
-            }
 
-            else if (currentLevelNumber == 2) {
-                changeCurrentLevel(level3);
-                spawnCircular(xPos, yPos, 'a');
-                currentLevelNumber = 3;
-            }
+            levelComplete();
 
-            else if (currentLevelNumber == 3) {
-                shouldRun = false;
-            }
             xPos = 1;
             yPos = 1;
             keys = 0;
+            return -200;
         }
 
     }
