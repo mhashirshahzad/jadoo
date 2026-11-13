@@ -1,4 +1,5 @@
 #include "levels.hpp"
+#include "fx.hpp"
 
 // size of the current level. it is always a square in my book
 int currentLevelSize = 40;
@@ -50,7 +51,7 @@ char levels[10][100][100] = {
   "*      **                          E   *",
   "*****  **********BB*********************",
   "*****  **********VV*********************",
-  "*      **  **  GG          **     v    *",
+  "*      **  **  GG          **          *",
   "*      **  **  GG          **          *",
   "*  ******  **  **********  **  ******  *",
   "*  ******  **  **********  **  ******  *",
@@ -122,6 +123,7 @@ void deleteCharFromCurrentLevel(char ch) {
     for (j = 0;j <= currentLevelSize; j++) {
       if (currentLevel[i][j] == ch || currentLevel[i][j] == ch - 32) {
       currentLevel[i][j] = ' ';
+      fxBuffer[i][j] = ch;
       }
     }
   }
@@ -129,6 +131,10 @@ void deleteCharFromCurrentLevel(char ch) {
 
 void levelComplete() {
   changeCurrentLevel(levels[++currentLevelIndex]);
+}
+
+void levelRestart() {
+  changeCurrentLevel(levels[currentLevelIndex]);
 }
 
 void changeCurrentLevel(char newLevel[100][100]) {

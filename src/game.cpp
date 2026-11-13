@@ -1,16 +1,12 @@
-#include <climits>
 #include <iostream>
 
 #include "levels.hpp"
 #include "game.hpp"
+#include "fx.hpp"
 
 #include "lib/myconsole.h"
-#include "lib/mygraphics.h"
 
 using namespace std;
-
-
-
 
 void gameLoop() {
     bool shouldRun = true;
@@ -19,9 +15,6 @@ void gameLoop() {
     // [y][x] is the system blame @hashir not me 
     char prevBuffer[500][500] = {{'\0'}}; // edited it to 500 by 500
     char newBuffer[500][500] = {{'\0'}};
-    // draws on top of the buffer to make it ultra ultra cool
-    // todo by @hashir
-    char fxBuffer[500][500] = { {'\0'}};
 
     int prevCols = 0, prevLines = 0;
     int newCols = 0, newLines = 0;
@@ -123,9 +116,10 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
 
             char newChar = newBuffer[i][j];
             char prevChar = prevBuffer[i][j];
+            char fxChar = fxBuffer[i][j];
+
             if (newChar == prevChar)
                 ; // skip drawing
-
             // make this switch TODO
             else switch (newChar) {
                 case '@':
@@ -147,10 +141,14 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                     PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
                     break;
 
-                // ASCII blocks and walls
+                // ASCII blocks and walls ▲ ▼ ▶ ◀ 
                 case '*':
                     PlaceCursor(j + 1, i + 1);
                     cout << "█";
+                    break;
+                case '^':
+                    PlaceCursor(j + 1, i + 1);
+                    cout << "ఠ";
                     break;
                 case 'G':
                     SetColorAtPoint(j + 1, i + 1, CONSOLE_GREEN);
@@ -212,6 +210,13 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                     cout << newChar;
                     break;
             }
+
+            // fixes the UI to render an integer instead of the character :o
+            if (i == mid && j == 16) {
+                PlaceCursor(j + 1, i + 1);
+                cout << (int)newChar;
+            }
+
             prevBuffer[i][j] = newBuffer[i][j];
         }
     }
@@ -269,7 +274,9 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun) {
 
         // Spike elimination
         else if (des == '^') {
-            shouldRun = false;
+            levelRestart();            
+            xPos = 1;
+            yPos = 1;
         }
 
         else if (des == 'g' || des == 'v' || des == 'b') {
