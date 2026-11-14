@@ -4,6 +4,10 @@ target("jadoo")
     set_kind("binary")
     add_files("src/**.cpp")
 
+    if is_plat("linux") then
+        add_ldflags("-lasound")
+    end
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

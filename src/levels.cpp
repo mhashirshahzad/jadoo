@@ -1,17 +1,21 @@
 #include "levels.hpp"
 #include "fx.hpp"
+#include "lib/myconsole.h"
 
 // size of the current level. it is always a square in my book
 int currentLevelSize = 40;
-int currentLevelIndex = 1;
+int currentLevelIndex = 0;
 
 char currentLevel[100][100];
 
-char level1[100][100] = {
+char levels[10][100][100] = {
+  
+  // level 1
+{
     "******************************",
-    "*   ***                     E ",
-    "*   ***                     E ",
-    "*   ***                     E ",
+    "*                            *",
+    "*   ***                 E    *",
+    "*   ***                      *",
     "*   ***   ***   **************",
     "*   ***   ***   **************",
     "*   ***   ***   **************",
@@ -39,9 +43,46 @@ char level1[100][100] = {
     "******************************",
     "******************************",
     "\0",
-};
+  },
 
-char level2[100][100] = {
+// level 2
+{
+  "****************************************",
+  "*                                  E   *",
+  "*      **                          E   *",
+  "*****  **********BB*********************",
+  "*****  **********VV*********************",
+  "*      **  **  GG          **     v    *",
+  "*      **  **  GG          **          *",
+  "*  ******  **  **********  **  ******  *",
+  "*  ******  **  **********  **  ******  *",
+  "*      **      **      **          **  *",
+  "*      **      **      **          **  *",
+  "*****  ******  ******  **********  **  *",
+  "*****  ******  ******  **********  **  *",
+  "*  **  **              **      **  **  *",
+  "*  **  **         g    **      **  **  *",
+  "*  **  **********  ******  **  ******  *",
+  "*  **  **********  ******  **  ******  *",
+  "*  **      **      **      **          *",
+  "*  **      **      **      **          *",
+  "*  ******  **  ******  **************  *",
+  "*  ******  **  ******  **************  *",
+  "*      **  **      **      **          *",
+  "*      **  **      **      **   b      *",
+  "*  ******  ******  ******  **********  *",
+  "*  ******  ******  ******  **********  *",
+  "*          **  **      **          **  *",
+  "*          **  **      **          **  *",
+  "*  **********  ******  **********  **  *",
+  "*  **********  ******  **********  **  *",
+  "*                              **  **  *",
+  "*                              **  **  *",
+  "****************************************",
+  "\0",
+  },
+    
+{
     "******************************",
     "*              D  *   ^^  * **",
     "* * ******* *** * * * *** * **",
@@ -71,101 +112,53 @@ char level2[100][100] = {
     "* * ***** * * * * ***** * * **",
     "* *       * ^ *       *      *",
     "*************************** E*",
-
-    "\0",
-};
-
-char level3[100][100] = {
-    "****************************************",
-    "*      **                          E   *",
-    "*      **                          E   *",
-    "*****  **********BB*********************",
-    "*****  **********VV*********************",
-    "*      **  **  GG          **     v    *",
-    "*      **  **  GG          **          *",
-    "*  ******  **  **********  **  ******  *",
-    "*  ******  **  **********  **  ******  *",
-    "*      **      **      **          **  *",
-    "*      **      **      **          **  *",
-    "*****  ******  ******  **********  **  *",
-    "*****  ******  ******  **********  **  *",
-    "*  **  **              **      **  **  *",
-    "*  **  **         g    **      **  **  *",
-    "*  **  **********  ******  **GG******  *",
-    "*  **  **********  ******  **  ******  *",
-    "*  **      **      **      **          *",
-    "*  **      **      **      **          *",
-    "*  ******  **  ******  **************  *",
-    "*  ******  **  ******  **************  *",
-    "*      **  **      **      **          *",
-    "*      **  **      **      **   b      *",
-    "*  ******  ******  ******  **********  *",
-    "*  ******  ******  ******  **********  *",
-    "*          **  **      **          **  *",
-    "*          **  **      **          **  *",
-    "*  **********  ******  **********  **  *",
-    "*  **********  ******  **********  **  *",
-    "*                              **  **  *",
-    "*                              **g **  *",
-    "****************************************",
-    "\0",
-};
-
-
-
-
-void deleteCharFromCurrentLevel(char ch, int x, int y) {
-
-    currentLevel[y][x] = ' ';
-    spawnExplosion(y, x, ch);
-
-    char door = ch - 32;
-
-    for (int i = 0; i < currentLevelSize; i++) {
-        for (int j = 0; j < currentLevelSize; j++) {
-            if (currentLevel[i][j] == door) {
-                currentLevel[i][j] = ' ';
-                spawnExplosion(i, j, ch);
-            }
-        }
-    }
     
+    "\0",
+  }
+};
 
+
+void deleteEveryCharFromCurrentLevel(char ch) {
+  int i = 0, j = 0;
+  for (; i <= currentLevelSize ; i++) {
+    for (j = 0;j <= currentLevelSize; j++) {
+      if (currentLevel[i][j] == ch || currentLevel[i][j] == ch - 32) {
+        currentLevel[i][j] = ' ';
+
+        if (ch == 'g')
+            spawnExplosion(i, j, ch, CONSOLE_BG_GREEN);
+        else if (ch == 'b')
+            spawnExplosion(i, j, ch, CONSOLE_BG_BLUE);
+        else if (ch == 'v')
+            spawnExplosion(i, j, ch, CONSOLE_BG_RED | CONSOLE_BG_BLUE);
+      }
+    }
+  }
+}
+void deleteCharFromCurrentLevel(int yPos, int xPos, char ch) {
+  currentLevel[yPos][xPos] = ' ';
 }
 
+void levelComplete() {
+  changeCurrentLevel(levels[++currentLevelIndex]);
+}
 void levelRestart() {
-    if (currentLevelIndex == 1)
-        changeCurrentLevel(level1);
-
-    else if (currentLevelIndex == 2)
-        changeCurrentLevel(level2);
-
-    else if (currentLevelIndex == 3)
-        changeCurrentLevel(level3);
+  changeCurrentLevel(levels[currentLevelIndex]);
 }
 
 void changeCurrentLevel(char newLevel[100][100]) {
-    currentLevelSize = 0;
-
-    //This is to clear the previous level :|
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
-            currentLevel[i][j] = ' ';
-        }
+  currentLevelSize = 0;
+  int i = 0, j = 0;
+  for (; i <= 100 && newLevel[i][0] != '\0'; i++) {
+    for (j = 0;j <=100 && newLevel[i][j] != '\0'; j++) {
+      currentLevel[i][j] = newLevel[i][j];
     }
 
-    int i = 0, j = 0;
-    for (; i < 100 && newLevel[i][0] != '\0'; i++) {
-        for (j = 0;j < 100 && newLevel[i][j] != '\0'; j++) {
-            currentLevel[i][j] = newLevel[i][j];
-        }
-
-        if (j > currentLevelSize) {
-            currentLevelSize = j;
-        }
+    if (j > currentLevelSize) {
+      currentLevelSize = j;
     }
-    if (i > currentLevelSize) {
-        currentLevelSize = i;
-    }
-
+  }
+  if (i > currentLevelSize) {
+      currentLevelSize = i;
+  }
 }

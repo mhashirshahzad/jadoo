@@ -59,8 +59,8 @@ void OutputString(int x,int y,char *str);
 //this function is an alternative to ClearScreen(), when ClearScreen() does not work on windows 7
 void ClearScreen1();
 
-
-
+// does a beep, freq(HZ) duration(ms)
+int ConsoleBeep(int freq, int duration);
 //this function checks if a key is pressed and if a key is pressed
 //then it returns the ascii code of the key pressed
 //the parameter waitTime specifies how long we have to wait for an input

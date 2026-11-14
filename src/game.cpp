@@ -1,5 +1,4 @@
 #include <iostream>
-#include<Windows.h>
 
 
 #include "levels.hpp"
@@ -11,6 +10,10 @@
 using namespace std;
 
 void gameLoop() {
+
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    #endif
     bool shouldRun = true;
 
     // buffer system to prevent flickering
@@ -26,8 +29,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    int currentLevelNumber = 1;
-    changeCurrentLevel(level1);
+    changeCurrentLevel(levels[currentLevelIndex]);
     ClearScreen();
 
     while (shouldRun) {
@@ -45,7 +47,13 @@ void gameLoop() {
 
         resetBuffer(newBuffer, newLines, newCols);        
         PlaceCursor(1, 1); // was (0,0) test changed it 
-        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun, currentLevelNumber);
+        int keyCode = handleInput(playerXPos, playerYPos, keysObtained, shouldRun, currentLevelIndex);
+
+        if (keyCode == -200) {
+            ClearScreen();
+            resetBuffer(prevBuffer,newLines, newCols);
+            resetBuffer(newBuffer,newLines, newCols);
+        }
 
         paintMap(playerXPos, playerYPos, newBuffer);
         paintUI(keyCode, newBuffer, keysObtained);
@@ -254,53 +262,54 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         }
         else if (des == 'k') {
             keys++;
+            ConsoleBeep(1000, 100);
             currentLevel[newY][newX] = ' ';
             
+            spawnCollected(newY, newX, 'k');
             xPos = newX;
             yPos = newY;
         }
         else if (des == 'D' && keys > 0) {
             keys--;
-            currentLevel[newY][newX] = ' ';
-
-            spawnExplosion(newY, newX, 'D');
+            ConsoleBeep(300, 10);
+            spawnOpened(newY, newX, 'D');
+            deleteCharFromCurrentLevel(newY, newX, des);
             xPos = newX;
             yPos = newY;
         }
 
         // Spike elimination
         else if (des == '^') {
-            shouldRun = false;
+            levelRestart();
+            xPos = 1; yPos = 1;
+            spawnCircular(newY, newX, '-', CONSOLE_BG_RED);
+            ConsoleBeep(2000, 200);
+
         }
 
         else if (des == 'g' || des == 'v' || des == 'b') {
+            ConsoleBeep(300, 10);
+
             xPos = newX;
             yPos = newY;
-            deleteCharFromCurrentLevel(des, newX, newY);
+            deleteEveryCharFromCurrentLevel(des);
+
         }
 
         else if (des == 'E') {
 
+
             //Now the beep is synchronized better :)
             cout.flush();
-            Beep(1200, 300);
 
-            if (currentLevelNumber == 1) {
-                changeCurrentLevel(level2);
-                currentLevelNumber = 2;
-            }
+            ConsoleBeep(1200, 300);
 
-            else if (currentLevelNumber == 2) {
-                changeCurrentLevel(level3);
-                currentLevelNumber = 3;
-            }
+            levelComplete();
 
-            else if (currentLevelNumber == 3) {
-                shouldRun = false;
-            }
             xPos = 1;
             yPos = 1;
             keys = 0;
+            return -200;
         }
 
     }
