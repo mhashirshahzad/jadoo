@@ -264,14 +264,15 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             ConsoleBeep(1000, 100);
             currentLevel[newY][newX] = ' ';
             
+            spawnCollected(newY, newX, 'k');
             xPos = newX;
             yPos = newY;
         }
         else if (des == 'D' && keys > 0) {
             keys--;
             ConsoleBeep(300, 10);
+            spawnOpened(newY, newX, 'D');
             deleteCharFromCurrentLevel(newY, newX, des);
-            spawnExplosion(newY, newX, 'D');
             xPos = newX;
             yPos = newY;
         }

@@ -1,5 +1,6 @@
 #include "levels.hpp"
 #include "fx.hpp"
+#include "lib/myconsole.h"
 
 // size of the current level. it is always a square in my book
 int currentLevelSize = 40;
@@ -125,7 +126,7 @@ void deleteEveryCharFromCurrentLevel(char ch) {
         currentLevel[i][j] = ' ';
 
         if (ch == 'g')
-            spawnExplosion(i, j, ch, CONSOLE_BG_RED);
+            spawnExplosion(i, j, ch, CONSOLE_BG_GREEN);
         else if (ch == 'b')
             spawnExplosion(i, j, ch, CONSOLE_BG_BLUE);
         else if (ch == 'v')
