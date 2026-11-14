@@ -295,6 +295,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             deleteEveryCharFromCurrentLevel(des);
 
         }
+        
 
         else if (des == 'E') {
 
