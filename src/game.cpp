@@ -1,6 +1,7 @@
 #include <iostream>
 #include<Windows.h>
 
+
 #include "levels.hpp"
 #include "game.hpp"
 #include "fx.hpp"
@@ -280,6 +281,8 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
 
         else if (des == 'E') {
 
+            //Now the beep is synchronized better :)
+            cout.flush();
             Beep(1200, 300);
 
             if (currentLevelNumber == 1) {
