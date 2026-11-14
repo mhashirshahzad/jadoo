@@ -256,7 +256,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
         // this is if that point is walkable
 
         char des = currentLevel[newY][newX];
-        if (des == ' ') {
+        if (des == ' ' || des == '.') {
             xPos = newX;
             yPos = newY;
         }
@@ -276,6 +276,20 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             deleteCharFromCurrentLevel(newY, newX, des);
             xPos = newX;
             yPos = newY;
+        }
+        else if (des == 'T') {
+            ConsoleBeep(1000, 10);
+            
+            for (int i = 0; i < currentLevelSize; i++)
+            {
+                for (int j = 0; j < currentLevelSize; j++)
+                {
+                    if (currentLevel[i][j] == '.') {
+                        currentLevel[i][j] = '*';
+                        currentLevel[yPos][xPos] = ' ';
+                    }
+                }
+            }
         }
 
         // Spike elimination
