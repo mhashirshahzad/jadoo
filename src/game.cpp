@@ -30,7 +30,7 @@ void gameLoop() {
     cout << "\033[?25l";
     
     int playerXPos = 1, playerYPos = 1;
-    changeCurrentLevel(levels[currentLevelIndex]);
+    changeCurrentLevel(levels[currentLevelIndex], playerXPos, playerYPos);
     ClearScreen();
 
     while (shouldRun) {
@@ -143,6 +143,9 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                 case 'D':
                     PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED);
                     break;
+                case 'E':
+                    PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_GREEN | CONSOLE_RED);
+                    break;
                 case 'b':
                     PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_BLUE);
                     break;
@@ -152,6 +155,8 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
                 case 'v':
                     PrintColoredCharAtPoint(j + 1, i + 1, newChar, CONSOLE_RED | CONSOLE_BLUE);
                     break;
+                // case 'T': case '.':
+                //     break;
 
                 // ASCII blocks and walls ▲ ▼ ▶ ◀ 
                 case '*':

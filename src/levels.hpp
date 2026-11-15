@@ -12,12 +12,12 @@ extern char levels[10][100][100];
 
 
 // changes currentLevel and updates CurrentLevelSize
-void changeCurrentLevel(char newLevel[100][100]);
+void changeCurrentLevel(char newLevel[100][100], int &playerXPos, int &playerYPos);
 
 // updates currentLevel to be the next Level
-void levelComplete();
+void levelComplete(int &playerXPos, int &playerYPos);
 // blud this doesn't need comments
-void levelRestart();
+void levelRestart(int &playerXPos, int &playerYPos);
 // deletes a char, i.e sending g deletes all G and g blocks from level;
 void deleteEveryCharFromCurrentLevel(char ch);
 // replaces every instance of oldCh with newCh
