@@ -1,5 +1,10 @@
 add_rules("mode.debug", "mode.release")
 
+-- ensures proper clangd support as it uses that :O
+add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
+
+
+
 target("jadoo")
     set_kind("binary")
     add_files("src/**.cpp")

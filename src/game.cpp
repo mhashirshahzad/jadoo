@@ -4,6 +4,7 @@
 #include "levels.hpp"
 #include "game.hpp"
 #include "fx.hpp"
+#include "input.hpp"
 
 #include "lib/myconsole.h"
 
@@ -223,111 +224,6 @@ void renderBuffer(char prevBuffer[500][500], char newBuffer[500][500]) {
             prevBuffer[i][j] = newBuffer[i][j];
         }
     }
-}
-
-int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLevelNumber) {
-
-    int key = CheckKeyPressed(10);
-
-    if (key == ESCKEY || key == 'q') {
-        shouldRun = false;
-        return key;
-    }
-    // Player movement done by @ayaan @uzair
-    int newX = xPos;
-    int newY = yPos;
-
-    if (key == 'W' || key == 'w' || key == UPKEY) {
-        newY--;
-    }
-    else if (key == 'S' || key == 's' || key == DOWNKEY) {
-        newY++;
-    }
-    else if (key == 'A' || key == 'a' || key == LEFTKEY) {
-        newX--;
-    }
-    else if (key == 'D' || key == 'd' || key == RIGHTKEY) {
-        newX++;
-    }
-
-    // This is for boundary colliding :|
-    if (newX >= 0 && newX < currentLevelSize && newY >= 0 && newY < currentLevelSize) {
-
-        // this is if that point is walkable
-
-        char des = currentLevel[newY][newX];
-        if (des == ' ' || des == '.') {
-            xPos = newX;
-            yPos = newY;
-        }
-        else if (des == 'k') {
-            keys++;
-            ConsoleBeep(1000, 100);
-            currentLevel[newY][newX] = ' ';
-            
-            spawnCollected(newY, newX, 'k');
-            xPos = newX;
-            yPos = newY;
-        }
-        else if (des == 'D' && keys > 0) {
-            keys--;
-            ConsoleBeep(300, 10);
-            spawnOpened(newY, newX, 'D');
-            deleteCharFromCurrentLevel(newY, newX, des);
-            xPos = newX;
-            yPos = newY;
-        }
-        else if (des == 'T') {
-            ConsoleBeep(1000, 10);
-            
-            for (int i = 0; i < currentLevelSize; i++)
-            {
-                for (int j = 0; j < currentLevelSize; j++)
-                {
-                    if (currentLevel[i][j] == '.') {
-                        currentLevel[i][j] = '*';
-                        currentLevel[yPos][xPos] = ' ';
-                    }
-                }
-            }
-        }
-
-        // Spike elimination
-        else if (des == '^') {
-            levelRestart();
-            xPos = 1; yPos = 1;
-            spawnCircular(newY, newX, '-', CONSOLE_BG_RED);
-            ConsoleBeep(2000, 200);
-
-        }
-
-        else if (des == 'g' || des == 'v' || des == 'b') {
-            ConsoleBeep(300, 10);
-
-            xPos = newX;
-            yPos = newY;
-            deleteEveryCharFromCurrentLevel(des);
-
-        }
-
-        else if (des == 'E') {
-
-
-            //Now the beep is synchronized better :)
-            cout.flush();
-
-            ConsoleBeep(1200, 300);
-
-            levelComplete();
-
-            xPos = 1;
-            yPos = 1;
-            keys = 0;
-            return -200;
-        }
-
-    }
-    return key; 
 }
 
 void resetBuffer(char buffer[500][500], int newLines, int newCols, char resetWith) {

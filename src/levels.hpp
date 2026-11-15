@@ -20,6 +20,8 @@ void levelComplete();
 void levelRestart();
 // deletes a char, i.e sending g deletes all G and g blocks from level;
 void deleteEveryCharFromCurrentLevel(char ch);
+// replaces every instance of oldCh with newCh
+void replaceEveryCharFromCurrentLevel(char oldCh, char newCh);
 // deletes a char whose position is (x, y)
 void deleteCharFromCurrentLevel(int yPos, int xPos, char ch);
 
