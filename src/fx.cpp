@@ -168,7 +168,7 @@ void updateFx(char prevBuffer[500][500]) {
       else if (fxBuffer[i][j][5] == 0) {// is dead 
         PrintColoredCharAtPoint(j + 1, i + 1, ' ', 0);
         fxBuffer[i][j][0] = 0;
-        prevBuffer[i][j] = '\1';
+        prevBuffer[i][j] = '\127';
       }
       else {
         char ch = fxBuffer[i][j][0];       
