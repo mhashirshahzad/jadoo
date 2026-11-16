@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClCompile Include="src\fx.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\levels.cpp" />
     <ClCompile Include="src\lib\myconsole.cpp" />
     <ClCompile Include="src\lib\mygraphics.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game.hpp" />
+    <ClInclude Include="src\input.hpp" />
     <ClInclude Include="src\levels.hpp" />
     <ClInclude Include="src\lib\myconsole.h" />
     <ClInclude Include="src\lib\mygraphics.h" />
