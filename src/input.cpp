@@ -74,6 +74,14 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
             xPos = newX;
             yPos = newY;
         }
+        else if (des == 't') {
+            ConsoleBeep(1000, 10);
+            
+            replaceEveryCharFromCurrentLevel(',', '*');
+            deleteCharFromCurrentLevel(newY, newX, 't');
+            xPos = newX;
+            yPos = newY;
+        }
 
         // Spike elimination
         else if (des == '^') {

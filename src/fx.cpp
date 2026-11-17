@@ -153,8 +153,10 @@ void spawnOpened(int row, int col, char ch, MYCOLORREF color) {
 
 void updateFx(char prevBuffer[500][500]) {
   // only mv every third frame
+  #ifdef unix
   if(fxFrame++ % 3 != 0) return;
-  
+  #endif
+
   int cols = 0, lines = 0;
   GetMaxWindowCoordinates(cols, lines);
   fxTick++;
