@@ -16,13 +16,13 @@
 },
 {
   "directory": "/media/hdd/Work/cpp/jadoo",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/fx.cpp.o", "src/fx.cpp"],
-  "file": "src/fx.cpp"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/input.cpp.o", "src/input.cpp"],
+  "file": "src/input.cpp"
 },
 {
   "directory": "/media/hdd/Work/cpp/jadoo",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/game.cpp.o", "src/game.cpp"],
-  "file": "src/game.cpp"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/fx.cpp.o", "src/fx.cpp"],
+  "file": "src/fx.cpp"
 },
 {
   "directory": "/media/hdd/Work/cpp/jadoo",
@@ -31,6 +31,11 @@
 },
 {
   "directory": "/media/hdd/Work/cpp/jadoo",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/input.cpp.o", "src/input.cpp"],
-  "file": "src/input.cpp"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/audio.cpp.o", "src/audio.cpp"],
+  "file": "src/audio.cpp"
+},
+{
+  "directory": "/media/hdd/Work/cpp/jadoo",
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-DNDEBUG", "-o", "build/.objs/jadoo/linux/x86_64/release/src/game.cpp.o", "src/game.cpp"],
+  "file": "src/game.cpp"
 }]

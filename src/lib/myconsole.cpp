@@ -5,19 +5,18 @@
 #else
     #include <unistd.h>
     #include <termios.h>
+    #include <vector>
     #include <fcntl.h>
     #include <sys/ioctl.h>
     #include <sys/select.h>
-    // #include <cstdint>
     #include <alsa/asoundef.h>
     #include <alsa/asoundlib.h>
 #endif
 
-// some of these are used by windows
 #include <iostream>
 #include <stdlib.h>
 #include <cmath>
-
+#include <thread>
 using namespace std;
 
 #include "myconsole.h"
@@ -165,7 +164,9 @@ bool SetColorAtPoint(int x,int y,int color)
 }
 
 int ConsoleBeep(int freq, int duration) {
-    Beep(freq, duration);
+    // Beep(freq, duration);
+    std::thread worker(Beep, freq, duration);
+    worker.detach();
     return 0; 
 }
 bool PrintColoredCharAtPoint(int x, int y, char c, int color) {
@@ -264,32 +265,44 @@ void ClearScreen1()
     ansiClear();
 }
 
-int ConsoleBeep(int freq, int duration) {
+// defined to mimic windows
+// don't call 
+int Beep(int freq, int duration) {
+    static snd_pcm_t* pcm = nullptr;
+    const unsigned rate = 44100;
+    if (!pcm) {
+        if (snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0) < 0) { pcm = nullptr; return 1; }
+        snd_pcm_set_params(pcm, SND_PCM_FORMAT_S16_LE, SND_PCM_ACCESS_RW_INTERLEAVED,
+                           1, rate, 1, 50000);
+    }
 
-    return 0;
-    // static snd_pcm_t *pcm = NULL;
-    // if (pcm == NULL) {
-    //     if (snd_pcm_open(&pcm, "default", SND_PCM_STREAM_PLAYBACK, 0)) return -1;
-    // snd_pcm_set_params(pcm, SND_PCM_FORMAT_U8,
-    //                     SND_PCM_ACCESS_RW_NONINTERLEAVED, 1, 8000, 1, 20000);
-    // }
-    // unsigned char buf[2400];
-    // long frames;
-    // long phase;
+    const int n    = rate * duration / 1000;
+    const int fade = rate / 200;
+    std::vector<int16_t> buf(n);
+    for (int i = 0; i < n; ++i) {
+        double env = i < fade ? double(i) / fade : (i > n - fade ? double(n - i) / fade : 1.0);
+        buf[i] = freq ? int16_t(std::sin(2.0 * M_PI * freq * i / rate) * 12000 * env) : 0;
+    }
 
-    // for (int i = 0; i < duration / 50; i++) {
-    //     snd_pcm_prepare(pcm);
-    //     for (int j = 0; j < sizeof(buf); j++) {
-    //         buf[j] = freq > 0 ? (255 * j * freq / 8000) : 0;
-    //     }
-    //     int r = snd_pcm_writei(pcm, buf, sizeof(buf));
-    //     if (r < 0) {
-    //       snd_pcm_recover(pcm, r, 0);
-    //     }
-    // }
-    // return 0;
+    int16_t* p = buf.data();
+    int left = n;
+    while (left > 0) {
+        snd_pcm_sframes_t r = snd_pcm_writei(pcm, p, left);
+        if (r < 0) { if (snd_pcm_recover(pcm, (int)r, 1) < 0) return 1; continue; }
+        p += r; left -= (int)r;
+    }
+    snd_pcm_drain(pcm);
+    snd_pcm_prepare(pcm);
+   return 0;
 }
 
+
+int ConsoleBeep(int freq, int duration) {
+    // Beep(freq, duration);
+    std::thread worker(Beep, freq, duration);
+    worker.detach();
+    return 0; 
+}
 
 int CheckKeyPressed(int waitTime)
 {
