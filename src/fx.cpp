@@ -77,6 +77,9 @@ void spawnCircular(int row, int col, char ch, MYCOLORREF color) {
   }
 }
 void spawnCurtain(int hLength, int vLength, char ch, MYCOLORREF color) {
+  #ifdef __WIN32
+  return
+  #endif
   for (int a = hLength; a > 0; a--) {
     for (int n = vLength; n > 0; n--) {
       int x = n;
@@ -183,7 +186,8 @@ void updateFx(char prevBuffer[500][500]) {
 
         // delete previous char
         fxBuffer[i][j][0] = 0;
-        prevBuffer[i][j] = '\1';
+        prevBuffer[i][j] = '\127'; // makes a diff in prev buffer
+        // and new buffer hence it is redrawn UwU
         PrintColoredCharAtPoint(j + 1, i + 1, ' ', 0);
         
         // TERMINAL VELOCITY

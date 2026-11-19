@@ -18,6 +18,7 @@ void spawnExplosion(int row, int col, char ch, MYCOLORREF color = CONSOLE_INTENS
 // an alternative to spawnExplosion (used for player death :c)
 void spawnCircular(int row, int col, char ch, MYCOLORREF color = CONSOLE_INTENSITY);
 // a curtain which falls from up to down for fun :o
+// doesn't work on windows :3
 void spawnCurtain(int hLength, int vLength, char ch, MYCOLORREF color = CONSOLE_BG_INTENSITY);
 
 // the item appears to move up as if its collected :O
