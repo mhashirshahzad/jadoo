@@ -265,8 +265,8 @@ void ClearScreen1()
     ansiClear();
 }
 
-// defined to mimic windows
-// don't call 
+// defined to mimic windows, 0 idea what tihs is
+// but sends the beep signal to alsa speaker
 int Beep(int freq, int duration) {
     static snd_pcm_t* pcm = nullptr;
     const unsigned rate = 44100;

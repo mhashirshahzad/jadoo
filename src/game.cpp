@@ -1,6 +1,7 @@
 #include <iostream>
 
 
+#include "audio.hpp"
 #include "levels.hpp"
 #include "game.hpp"
 #include "fx.hpp"
@@ -32,6 +33,7 @@ void gameLoop() {
     int playerXPos = 1, playerYPos = 1;
     changeCurrentLevel(levels[currentLevelIndex], playerXPos, playerYPos);
     ClearScreen();
+    startPlayingBGMusic();
 
     while (shouldRun) {
         GetMaxWindowSize(newCols, newLines);
