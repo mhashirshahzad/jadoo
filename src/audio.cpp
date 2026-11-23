@@ -6,36 +6,44 @@
 // music from https://github.com/ShaneMcC/beeps/blob/master/monkeyisland.sh
 
 //  melody[freq][dur]
-int melody[100][2] = {
-  {50, 150},
-  {30, 150},
+int melodyStart[100][2] = {
+  {300, 150},
   {500, 150},
-  {200, 150},
-  {10, 150},
-  {1000, 150},
-  {50, 150},
-  {30, 150},
+  {700, 150},
+  {300, 150},
   {500, 150},
-  {200, 150},
-  {10, 150},
-  {1000, 150},
-  {50, 150},
-  {30, 150},
+  {700, 150},
+  {300, 150},
   {500, 150},
-  {200, 150},
-  {10, 150},
-  {1000, 150},
-  {50, 150},
-  {30, 150},
+  {700, 150},
+  {300, 150},
   {500, 150},
-  {200, 150},
-  {10, 150},
-  {1000, 150},
+  {700, 150},
+  {300, 150},
+  {500, 150},
+  {700, 150},
+};
+int melodyEnd[100][2] = {
+  {800, 150},
+  {650, 150},
+  {500, 150},
+  {800, 150},
+  {650, 150},
+  {500, 150},
+  {800, 150},
+  {650, 150},
+  {500, 150},
+  {800, 150},
+  {650, 150},
+  {500, 150},
+  {800, 150},
+  {650, 150},
+  {500, 150},
 };
 
 
-void playInBG() {
-  for (int i = 0; i < 23; i++) {
+void playInBG(int melody[100][2], int size) {
+  for (int i = 0; i < size; i++) {
     ConsoleBeep(melody[i][0], melody[i][1]);
     ConsoleSleep(melody[i][1]);
   }
@@ -43,7 +51,11 @@ void playInBG() {
 
 
 void startPlayingBGMusic() {
-    std::thread worker(playInBG);
+    std::thread worker(playInBG, melodyStart, 14);
+    worker.detach();
+}
+void startPlayingEndMusic() {
+    std::thread worker(playInBG, melodyEnd, 14);
     worker.detach();
 }
 

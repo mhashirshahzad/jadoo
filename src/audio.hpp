@@ -2,8 +2,6 @@
 #define AUDIO_HPP
 
 
-// first one is frequency and 2nd one is duration
-extern int melody[][2];
-
 void startPlayingBGMusic();
+void startPlayingEndMusic();
 #endif 
