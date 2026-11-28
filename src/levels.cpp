@@ -173,6 +173,9 @@ void replaceEveryCharFromCurrentLevel(char oldCh, char newCh) {
     }
   }
 }
+
+
+//Delete and replace the required characters like the keys (k,D,G) so that once player steps on them these keys can be removed from the maze.
 void deleteEveryCharFromCurrentLevel(char ch) {
   int i = 0, j = 0;
   for (; i <= currentLevelSize ; i++) {
