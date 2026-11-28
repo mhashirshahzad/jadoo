@@ -109,7 +109,7 @@ int handleInput(int& xPos, int& yPos, int& keys, bool& shouldRun, int &currentLe
 
             ConsoleBeep(1200, 300);
             levelComplete(xPos, yPos);
-            spawnCurtain(currentLevelSize, currentLevelSize, '#');
+            /*spawnCurtain(currentLevelSize, currentLevelSize, '#');*/
             keys = 0;
             return -200;
         }
